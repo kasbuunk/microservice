@@ -13,7 +13,7 @@ import (
 )
 
 func (r *mutationResolver) RegisterUser(ctx context.Context, input model.RegisterUserInput) (*user.User, error) {
-	usr, _ := user.New(input.Email, input.Password)
+	usr, _ := user.New(user.Email(input.Email), user.Password(input.Password))
 
 	usr, err := r.UserRepository.Save(usr)
 	if err != nil {
