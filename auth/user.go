@@ -8,6 +8,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+const EmailMaxLength = 64
+
 type User struct {
 	ID           uuid.UUID
 	Email        Email
@@ -44,7 +46,7 @@ func validateEmail(email Email) error {
 	if err != nil {
 		return fmt.Errorf("email '%s' invalid", email)
 	}
-	if len(email) > 64 {
+	if len(email) > EmailMaxLength {
 		return fmt.Errorf("email cannot have more than 64 characters")
 	}
 	return nil
