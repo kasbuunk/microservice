@@ -30,10 +30,10 @@ func TestNewConfig(t *testing.T) {
 		t.Error("getting config", err)
 	}
 
-	if conf.Server.Port != port {
+	if int(conf.Server.Port) != port {
 		t.Errorf(ExpectedGotFormat, port, conf.Server.Port)
 	}
-	if conf.Server.GQLEndpoint != gqlEndpoint {
+	if string(conf.Server.GQLEndpoint) != gqlEndpoint {
 		t.Errorf(ExpectedGotFormat, gqlEndpoint, conf.Server.GQLEndpoint)
 	}
 	if conf.DB.Host != dbHost {

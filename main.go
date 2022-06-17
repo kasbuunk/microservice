@@ -25,12 +25,12 @@ func main() {
 
 	authService := auth.New(repo)
 
-	svc, err := server.New(conf.Server, authService)
+	svc, err := server.New(conf.Server.GQLEndpoint, authService)
 	if err != nil {
 		log.Fatalf("Initialisation of server failed: %v", err)
 	}
 
-	err = svc.Serve(conf.Server)
+	err = svc.Serve(conf.Server.Port)
 	if err != nil {
 		panic(err)
 	}

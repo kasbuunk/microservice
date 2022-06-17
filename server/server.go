@@ -16,18 +16,21 @@ import (
 )
 
 type Server interface {
-	Serve(Config) error
+	Serve(Port) error
 }
 
 type Service struct{}
 
 type Config struct {
-	Port        int
-	GQLEndpoint string
+	Port        Port
+	GQLEndpoint GQLEndpoint
 }
 
+type Port int
+type GQLEndpoint string
+
 // New takes an endpoint  returns a new server
-func New(conf Config, auth auth.Auth) (Server, error) {
+func New(endpoint GQLEndpoint, auth auth.Auth) (Server, error) {
 	srv := handler.NewDefaultServer(
 		generated.NewExecutableSchema(
 			generated.Config{
@@ -35,14 +38,14 @@ func New(conf Config, auth auth.Auth) (Server, error) {
 					Auth: auth,
 				}}))
 
-	http.Handle("/", playground.Handler("GraphQL playground", conf.GQLEndpoint))
-	http.Handle(conf.GQLEndpoint, srv)
+	http.Handle("/", playground.Handler("GraphQL playground", string(endpoint)))
+	http.Handle(string(endpoint), srv)
 
 	return Service{}, nil
 }
 
-func (s Service) Serve(conf Config) error {
-	log.Printf("connect to http://localhost:%d/ for GraphQL playground", conf.Port)
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", conf.Port), nil))
+func (s Service) Serve(port Port) error {
+	log.Printf("connect to http://localhost:%d/ for GraphQL playground", port)
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), nil))
 	return nil
 }

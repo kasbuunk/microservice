@@ -11,20 +11,20 @@ import (
 )
 
 var testConf = Config{
-	Port:        18432,
-	GQLEndpoint: "/gql",
+	Port:        Port(18432),
+	GQLEndpoint: GQLEndpoint("/gql"),
 }
 var serverURL = fmt.Sprintf("http://localhost:%v%v", testConf.Port, testConf.GQLEndpoint)
 
 func setupServer(t *testing.T) {
-	server, err := New(testConf, nil)
+	server, err := New(testConf.GQLEndpoint, nil)
 	if err != nil {
 		t.Error(err)
 	}
 
 	// Start server in separate process.
 	go func() {
-		err := server.Serve(testConf)
+		err := server.Serve(testConf.Port)
 		if err != nil {
 			t.Error(err)
 		}
