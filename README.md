@@ -37,6 +37,8 @@ The core feature is to showcase a microservice architecture with an inward depen
 
 In this example, `auth` has any and all domain logic. It should use the ubiquitous language of the problem domain, and not include any technical implementation of how instances are stored or retrieved from the database, for example.
 
+The api interface also has 'broker' clients if any side-effects need to be performed, like network calls to services in- or outside the cluster.
+
 ### Config layer
 `config` has all the configuration that the microservice persists throughout its lifetime. It is strictly immutable. It includes configuration of the microservice's dependencies to be loosely coupled to its deployment environment.
 
@@ -50,7 +52,11 @@ The main package that and only that configuration that the other packages need. 
 
 ### Server layer
 
-`server` initialises a server that, in this case, is an http server. Even though the design is meant to be api-agnostic. One could, for instance, add a gRPC, REST or SOAP implementation that calls the same domain logic and uses the same storage interface.
+`server` is the source of input for this service for invocations of behaviour. It initialises a server that, in this case, is an http server. Even though the design is meant to be api-agnostic. 
+
+One could, for instance, add a gRPC, REST or SOAP implementation that calls the same domain logic and uses the same storage interface.
+
+Publish/subscribe, event-driven architectures can also be implemented by starting a similar process that takes as input the interface of a domain core; in this case an implementation of the auth.Auth interface. The server in that case is a process that subscribes, listens, polls, or otherwise receives messages and accordingly calls the corresponding methods on the api it has access to.
 
 #### Graph layer
 
