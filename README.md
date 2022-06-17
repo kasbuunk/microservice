@@ -4,7 +4,7 @@ This project is licensed under the MIT License.
 
 The microservice in this example exposes a graphql api over http, although the very purpose of this project is to design a microservice to be api-agnostic. 
 
-The domain core is located in the `user` package, exposing some user-specific logic. It explicitly does not import any non-domain package. 
+The domain core is located in the `auth` package, exposing some user-related logic. It explicitly does not import any non-domain package. 
 
 ## Prerequisites
 
@@ -35,7 +35,7 @@ The core feature is to showcase a microservice architecture with an inward depen
 
 ### Domain core
 
-In this example, `user` has any and all domain logic. It should use the ubiquitous language of the problem domain, and not include any technical implementation of how instances are stored or retrieved from the database, for example.
+In this example, `auth` has any and all domain logic. It should use the ubiquitous language of the problem domain, and not include any technical implementation of how instances are stored or retrieved from the database, for example.
 
 ### Config layer
 `config` has all the configuration that the microservice persists throughout its lifetime. It is strictly immutable. It includes configuration of the microservice's dependencies to be loosely coupled to its deployment environment.
@@ -64,5 +64,5 @@ The main package that and only that configuration that the other packages need. 
 
 `repository` sits in between the domain-logic and the storage layer. It translates the retrieval and persistence of entities that need to be committed to storage, and its functionality is called by the domain core package. 
 
-It may either be included as a subpackage under the `server` package or the `user` domain package, or be their parent. Since it does not include any domain-specific knowledge and mostly implements the interface to query databases, it will probably be included underneath the `server` package.
+It may either be included as a subpackage under the `server` package or the `auth` domain package, or be their parent. Since it does not include any domain-specific knowledge and mostly implements the interface to query databases, it will probably be included underneath the `server` package.
 
