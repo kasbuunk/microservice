@@ -7,30 +7,28 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/kasbuunk/microservice/auth"
 	"github.com/kasbuunk/microservice/graph/generated"
 	"github.com/kasbuunk/microservice/graph/model"
-	"github.com/kasbuunk/microservice/user"
 )
 
-func (r *mutationResolver) RegisterUser(ctx context.Context, input model.RegisterUserInput) (*user.User, error) {
-	usr, _ := user.New(user.Email(input.Email), user.Password(input.Password))
-
-	usr, err := r.UserRepository.Save(usr)
+func (r *mutationResolver) RegisterUser(ctx context.Context, input model.RegisterUserInput) (*auth.User, error) {
+	registeredUser, err := r.Auth.Register(auth.Email(input.Email), auth.Password(input.Password))
 	if err != nil {
-		return &usr, fmt.Errorf("saving user: %w", err)
+		return nil, fmt.Errorf("registering user: %w", err)
 	}
+	return &registeredUser, nil
+}
+
+func (r *queryResolver) Users(ctx context.Context) ([]*auth.User, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Users(ctx context.Context) ([]*user.User, error) {
+func (r *userResolver) ID(ctx context.Context, obj *auth.User) (string, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *userResolver) ID(ctx context.Context, obj *user.User) (string, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
-func (r *userResolver) Email(ctx context.Context, obj *user.User) (string, error) {
+func (r *userResolver) Email(ctx context.Context, obj *auth.User) (string, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 

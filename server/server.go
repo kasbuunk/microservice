@@ -10,9 +10,9 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 
+	"github.com/kasbuunk/microservice/auth"
 	"github.com/kasbuunk/microservice/graph"
 	"github.com/kasbuunk/microservice/graph/generated"
-	"github.com/kasbuunk/microservice/repository"
 )
 
 type Server interface {
@@ -27,12 +27,12 @@ type Config struct {
 }
 
 // New takes an endpoint  returns a new server
-func New(conf Config, repo repository.Repository) (Server, error) {
+func New(conf Config, auth auth.Auth) (Server, error) {
 	srv := handler.NewDefaultServer(
 		generated.NewExecutableSchema(
 			generated.Config{
 				Resolvers: &graph.Resolver{
-					UserRepository: repo,
+					Auth: auth,
 				}}))
 
 	http.Handle("/", playground.Handler("GraphQL playground", conf.GQLEndpoint))

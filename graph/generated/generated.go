@@ -13,8 +13,8 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
+	"github.com/kasbuunk/microservice/auth"
 	"github.com/kasbuunk/microservice/graph/model"
-	"github.com/kasbuunk/microservice/user"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -61,14 +61,14 @@ type ComplexityRoot struct {
 }
 
 type MutationResolver interface {
-	RegisterUser(ctx context.Context, input model.RegisterUserInput) (*user.User, error)
+	RegisterUser(ctx context.Context, input model.RegisterUserInput) (*auth.User, error)
 }
 type QueryResolver interface {
-	Users(ctx context.Context) ([]*user.User, error)
+	Users(ctx context.Context) ([]*auth.User, error)
 }
 type UserResolver interface {
-	ID(ctx context.Context, obj *user.User) (string, error)
-	Email(ctx context.Context, obj *user.User) (string, error)
+	ID(ctx context.Context, obj *auth.User) (string, error)
+	Email(ctx context.Context, obj *auth.User) (string, error)
 }
 
 type executableSchema struct {
@@ -307,9 +307,9 @@ func (ec *executionContext) _Mutation_registerUser(ctx context.Context, field gr
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*user.User)
+	res := resTmp.(*auth.User)
 	fc.Result = res
-	return ec.marshalNUser2ᚖgithubᚗcomᚋkasbuunkᚋmicroserviceᚋuserᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚖgithubᚗcomᚋkasbuunkᚋmicroserviceᚋauthᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_registerUser(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -368,9 +368,9 @@ func (ec *executionContext) _Query_users(ctx context.Context, field graphql.Coll
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]*user.User)
+	res := resTmp.([]*auth.User)
 	fc.Result = res
-	return ec.marshalNUser2ᚕᚖgithubᚗcomᚋkasbuunkᚋmicroserviceᚋuserᚐUserᚄ(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚕᚖgithubᚗcomᚋkasbuunkᚋmicroserviceᚋauthᚐUserᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_users(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -521,7 +521,7 @@ func (ec *executionContext) fieldContext_Query___schema(ctx context.Context, fie
 	return fc, nil
 }
 
-func (ec *executionContext) _User_id(ctx context.Context, field graphql.CollectedField, obj *user.User) (ret graphql.Marshaler) {
+func (ec *executionContext) _User_id(ctx context.Context, field graphql.CollectedField, obj *auth.User) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_User_id(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -565,7 +565,7 @@ func (ec *executionContext) fieldContext_User_id(ctx context.Context, field grap
 	return fc, nil
 }
 
-func (ec *executionContext) _User_email(ctx context.Context, field graphql.CollectedField, obj *user.User) (ret graphql.Marshaler) {
+func (ec *executionContext) _User_email(ctx context.Context, field graphql.CollectedField, obj *auth.User) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_User_email(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -2527,7 +2527,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 
 var userImplementors = []string{"User"}
 
-func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj *user.User) graphql.Marshaler {
+func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj *auth.User) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, userImplementors)
 	out := graphql.NewFieldSet(fields)
 	var invalids uint32
@@ -2954,11 +2954,11 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 	return res
 }
 
-func (ec *executionContext) marshalNUser2githubᚗcomᚋkasbuunkᚋmicroserviceᚋuserᚐUser(ctx context.Context, sel ast.SelectionSet, v user.User) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2githubᚗcomᚋkasbuunkᚋmicroserviceᚋauthᚐUser(ctx context.Context, sel ast.SelectionSet, v auth.User) graphql.Marshaler {
 	return ec._User(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNUser2ᚕᚖgithubᚗcomᚋkasbuunkᚋmicroserviceᚋuserᚐUserᚄ(ctx context.Context, sel ast.SelectionSet, v []*user.User) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2ᚕᚖgithubᚗcomᚋkasbuunkᚋmicroserviceᚋauthᚐUserᚄ(ctx context.Context, sel ast.SelectionSet, v []*auth.User) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -2982,7 +2982,7 @@ func (ec *executionContext) marshalNUser2ᚕᚖgithubᚗcomᚋkasbuunkᚋmicrose
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNUser2ᚖgithubᚗcomᚋkasbuunkᚋmicroserviceᚋuserᚐUser(ctx, sel, v[i])
+			ret[i] = ec.marshalNUser2ᚖgithubᚗcomᚋkasbuunkᚋmicroserviceᚋauthᚐUser(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -3002,7 +3002,7 @@ func (ec *executionContext) marshalNUser2ᚕᚖgithubᚗcomᚋkasbuunkᚋmicrose
 	return ret
 }
 
-func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋkasbuunkᚋmicroserviceᚋuserᚐUser(ctx context.Context, sel ast.SelectionSet, v *user.User) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋkasbuunkᚋmicroserviceᚋauthᚐUser(ctx context.Context, sel ast.SelectionSet, v *auth.User) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")

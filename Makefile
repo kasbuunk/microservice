@@ -8,9 +8,11 @@ lint: build
 test: build
 	go test ./...
 
+.PHONY: build
 build: bin/app
 
-bin/app:
+# TODO: build should not be phony, fix the pattern matching
+bin/app: *.go go.mod
 	go build -o bin/app ./
 
 gqlgen:

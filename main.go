@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	"github.com/kasbuunk/microservice/auth"
 	"github.com/kasbuunk/microservice/config"
 	"github.com/kasbuunk/microservice/repository"
 	"github.com/kasbuunk/microservice/server"
@@ -22,7 +23,9 @@ func main() {
 
 	repo := repository.New(db)
 
-	svc, err := server.New(conf.Server, repo)
+	authService := auth.New(repo)
+
+	svc, err := server.New(conf.Server, authService)
 	if err != nil {
 		log.Fatalf("Initialisation of server failed: %v", err)
 	}
