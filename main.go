@@ -32,6 +32,6 @@ func main() {
 
 	err = svc.Serve(conf.Server.Port)
 	if err != nil {
-		panic(err)
+		log.Fatalf("Serving failed: %v", err)
 	}
 }
