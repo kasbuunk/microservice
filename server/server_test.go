@@ -8,23 +8,25 @@ import (
 	"net/http"
 	"strings"
 	"testing"
+
+	"github.com/kasbuunk/microservice/test"
 )
 
-var testConf = Config{
-	Port:        Port(18432),
-	GQLEndpoint: GQLEndpoint("/gql"),
+var conf = Config{
+	Port:        Port(test.SvcPort),
+	GQLEndpoint: GQLEndpoint(test.SvcGQLEndpoint),
 }
-var serverURL = fmt.Sprintf("http://localhost:%v%v", testConf.Port, testConf.GQLEndpoint)
+var serverURL = fmt.Sprintf("http://localhost:%v%v", conf.Port, conf.GQLEndpoint)
 
 func setupServer(t *testing.T) {
-	server, err := New(testConf.GQLEndpoint, nil)
+	server, err := New(conf.GQLEndpoint, nil)
 	if err != nil {
 		t.Error(err)
 	}
 
 	// Start server in separate process.
 	go func() {
-		err := server.Serve(testConf.Port)
+		err := server.Serve(conf.Port)
 		if err != nil {
 			t.Error(err)
 		}

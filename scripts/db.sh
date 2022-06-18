@@ -6,26 +6,17 @@ source local.env
 # specify function that creates database with given name
 
 psql << EOF
-DROP DATABASE ${SVC_DB_NAME};
 DROP DATABASE ${SVC_DB_NAME}_test;
-CREATE DATABASE ${SVC_DB_NAME};
 CREATE DATABASE ${SVC_DB_NAME}_test;
 
-\c ${SVC_DB_NAME};
-CREATE TABLE users(
-  id character(16),
-  email character(64),
-  password_hash character(64),
-  PRIMARY KEY(id)
-);
-
 \c ${SVC_DB_NAME}_test;
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 CREATE TABLE users(
-  id character(16),
-  email character(64),
-  password_hash character(64),
+  id uuid DEFAULT gen_random_uuid() NOT NULL,
+  email varchar(64) UNIQUE NOT NULL,
+  password_hash varchar(64) UNIQUE NOT NULL,
   PRIMARY KEY(id)
 );
-
-
 EOF
