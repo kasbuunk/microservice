@@ -1,34 +1,42 @@
-package events
+package event
 
 type Subject string
 type Stream string
+type Body string
 
 type Message struct {
 	Stream  Stream
 	Subject Subject
-	Body    string
+	Body    Body
 }
 
 type Subscription struct {
-	//Subscriber Subscriber
 	Connection chan Message
 	Stream     Stream
 	Subject    Subject
 }
 
-type MessageBus interface {
+type Bus interface {
 	Subscribe(Stream, Subject) (chan Message, error)
 	Publish(Message) error
 }
 
-type Bus struct {
-	// Holds Subscriptions in memory for now, should be delegated elsewhere
+type Subscriber interface {
+	Subscribe(Stream, Subject) (chan Message, error)
+}
+
+type Publisher interface {
+	Publish(Message) error
+}
+
+type bus struct {
+	// Holds Subscriptions in memory for now, might be delegated elsewhere
 	// to remain stateless in case of horizontal scaling. Streams do not change at runtime.
 	Streams       []Stream
 	Subscriptions []Subscription
 }
 
-func (b *Bus) Publish(msg Message) error {
+func (b *bus) Publish(msg Message) error {
 	// For all subscribers that match the msg,
 	for _, subscription := range b.Subscriptions { // b.Subscriptions() when delegated state.
 		if subscribed(subscription, msg) {
@@ -40,7 +48,7 @@ func (b *Bus) Publish(msg Message) error {
 	return nil
 }
 
-func (b *Bus) Subscribe(stream Stream, subject Subject) (chan Message, error) {
+func (b *bus) Subscribe(stream Stream, subject Subject) (chan Message, error) {
 	c := make(chan Message)
 
 	subscription := Subscription{
@@ -57,8 +65,8 @@ func (b *Bus) Subscribe(stream Stream, subject Subject) (chan Message, error) {
 // NewMessageBus is initialised with a predetermined set of streams. Its subscriptions
 // should be added after initialisation, upon passing it to the services. The services
 // themselves are responsible for calling the method that adds their subscription.
-func NewMessageBus(streams []Stream) MessageBus {
-	return &Bus{
+func NewMessageBus(streams []Stream) Bus {
+	return &bus{
 		Streams:       streams,
 		Subscriptions: []Subscription{},
 	}

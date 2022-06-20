@@ -2,18 +2,16 @@ package auth
 
 import (
 	"fmt"
-	"log"
-
+	
 	"github.com/golang-jwt/jwt"
 
-	"github.com/kasbuunk/microservice/events"
+	"github.com/kasbuunk/microservice/event"
 )
 
-// Auth provides the api that maps closely to however you wish to communicate with external components.
+// API provides the interface that maps closely to however you wish to communicate with external components.
 // It may be a one-to-one mapping to a graphql schema or grpc service.
 // Other contexts, or 'domains', should communicate with each other through their APIs.
-type Auth interface {
-	Subscribe()
+type API interface {
 	// Register inserts a new account into the repository, that has yet to be activated.
 	Register(EmailAddress, Password) (User, error)
 	Login(EmailAddress, Password) (jwt.Token, error)
@@ -30,27 +28,15 @@ type Auth interface {
 // added here so the domain core remains pure and agnostic of any calls over the network, including other
 // microservices that are part of the same application.
 type Service struct {
-	User UserRepository
-	Bus  events.MessageBus
+	User      UserRepository
+	Publisher event.Publisher
 }
 
-func New(repo UserRepository, bus events.MessageBus) Auth {
+func New(repo UserRepository, pub event.Publisher) API {
 	return Service{
-		User: repo,
-		Bus:  bus,
+		User:      repo,
+		Publisher: pub,
 	}
-}
-
-// Subscribe listens for messages that match the Stream or Subject.
-func (s Service) Subscribe() {
-	fmt.Println("listening for messages")
-	// starts process in loop, in goroutine that awaits published messages and invokes api calls
-	messageChannel, err := s.Bus.Subscribe("EMAIL", "ACTIVATION_REQUEST_SENT")
-	if err != nil {
-		log.Fatal(fmt.Errorf("subscribing: %w", err))
-	}
-	fmt.Println(<-messageChannel)
-
 }
 
 func (s Service) Register(email EmailAddress, password Password) (User, error) {
@@ -65,12 +51,12 @@ func (s Service) Register(email EmailAddress, password Password) (User, error) {
 	}
 
 	// Invoke behaviour in Email service
-	msg := events.Message{
+	msg := event.Message{
 		Stream:  "AUTH",
 		Subject: "USER_REGISTERED",
-		Body:    fmt.Sprintf("new user registered with email %s", user.Email),
+		Body:    event.Body(fmt.Sprintf("new user registered with email %s", user.Email)),
 	}
-	err = s.Bus.Publish(msg)
+	err = s.Publisher.Publish(msg)
 	if err != nil {
 		return savedUser, fmt.Errorf("publishing msg: %w", err)
 	}
