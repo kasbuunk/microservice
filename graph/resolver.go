@@ -7,5 +7,5 @@ import "github.com/kasbuunk/microservice/auth"
 // It serves as dependency injection for your app, add any dependencies you require here.
 
 type Resolver struct {
-	Auth auth.Auth
+	Auth auth.API
 }
