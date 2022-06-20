@@ -12,17 +12,17 @@ const EmailMaxLength = 64
 
 type User struct {
 	ID           uuid.UUID
-	Email        Email
+	Email        EmailAddress
 	PasswordHash PasswordHash
 }
 
-type Email string
+type EmailAddress string
 type PasswordHash string
 type Password string
 
 // NewUser validates a user's invariants and returns the User. It does not save the entity to storage.
 // The caller must persist the new entity by calling its `Save()` method.
-func NewUser(email Email, password Password) (User, error) {
+func NewUser(email EmailAddress, password Password) (User, error) {
 	var user User
 
 	err := validateEmail(email)
@@ -41,7 +41,7 @@ func NewUser(email Email, password Password) (User, error) {
 	return user, nil
 }
 
-func validateEmail(email Email) error {
+func validateEmail(email EmailAddress) error {
 	_, err := mail.ParseAddress(string(email))
 	if err != nil {
 		return fmt.Errorf("email '%s' invalid", email)

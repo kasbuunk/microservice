@@ -3,8 +3,10 @@ package repository
 import (
 	"database/sql"
 	"fmt"
+
 	"github.com/google/uuid"
-	"github.com/kasbuunk/microservice/auth"
+
+	"github.com/kasbuunk/microservice/api/auth"
 )
 
 const tableName = "users"

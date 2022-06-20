@@ -10,7 +10,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 
-	"github.com/kasbuunk/microservice/auth"
+	"github.com/kasbuunk/microservice/api/auth"
 	"github.com/kasbuunk/microservice/graph"
 	"github.com/kasbuunk/microservice/graph/generated"
 )
@@ -30,7 +30,7 @@ type Port int
 type GQLEndpoint string
 
 // New takes an endpoint  returns a new server
-func New(endpoint GQLEndpoint, auth auth.API) (Server, error) {
+func New(endpoint GQLEndpoint, auth auth.Auth) (Server, error) {
 	srv := handler.NewDefaultServer(
 		generated.NewExecutableSchema(
 			generated.Config{
