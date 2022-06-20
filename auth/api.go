@@ -6,10 +6,10 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
-// Auth provides the api that maps closely to however you wish to communicate with external components.
+// API provides the api that maps closely to however you wish to communicate with external components.
 // It may be a one-to-one mapping to a graphql schema or grpc service.
 // Other contexts, or 'domains', should communicate with each other through their APIs.
-type Auth interface {
+type API interface {
 	// Register inserts a new account into the repository, that has yet to be activated.
 	Register(Email, Password) (User, error)
 	Login(Email, Password) (jwt.Token, error)
@@ -21,17 +21,19 @@ type Auth interface {
 	// User(id uuid.UUID) (User, error)
 }
 
-// Service implements the Auth interface. It has access to how Users are stored and retrieved through its
-// UserRepository. Additional repositories may be added here to access other entities.
-type Service struct {
+// Auth implements the API. It has access to how its entities are stored and retrieved through its
+// repositories. Additional repositories may be added here to access other entities. Other external clients are also
+// added here so the domain core remains pure and agnostic of any calls over the network, including other
+// microservices that are part of the same application.
+type Auth struct {
 	User UserRepository
 }
 
-func New(repo UserRepository) Auth {
-	return Service{User: repo}
+func New(repo UserRepository) API {
+	return Auth{User: repo}
 }
 
-func (s Service) Register(email Email, password Password) (User, error) {
+func (s Auth) Register(email Email, password Password) (User, error) {
 	user, err := NewUser(email, password)
 	if err != nil {
 		return user, fmt.Errorf("saving user: %w", err)
@@ -44,7 +46,7 @@ func (s Service) Register(email Email, password Password) (User, error) {
 	return savedUser, nil
 }
 
-func (s Service) Login(email Email, password Password) (jwt.Token, error) {
+func (s Auth) Login(email Email, password Password) (jwt.Token, error) {
 	// TODO: Add method to repo to retrieve user by email, or add filter to List users and use the first row.
 	// user := s.Users
 	_, err := hashPassword(password)
