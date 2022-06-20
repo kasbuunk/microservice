@@ -13,12 +13,12 @@ type Auth interface {
 	// Register inserts a new account into the repository, that has yet to be activated.
 	Register(Email, Password) (User, error)
 	Login(Email, Password) (jwt.Token, error)
-	//ChangePassword(UserRepository, Password, Password, Password) (User, error)
-	//ActivateAccount(UserRepository) (User, error)
+	// ChangePassword(UserRepository, Password, Password, Password) (User, error)
+	// ActivateAccount(UserRepository) (User, error)
 	// Users takes a repo and a list of filters to return a list of Users.
-	//Users(UserRepository, []string) ([]User, error)
+	// Users(UserRepository, []string) ([]User, error)
 	// User gets and returns a single User by ID from the repository.
-	//User(id uuid.UUID) (User, error)
+	// User(id uuid.UUID) (User, error)
 }
 
 // Service implements the Auth interface. It has access to how Users are stored and retrieved through its

@@ -1,13 +1,9 @@
 package repository
 
 import (
-	"context"
 	"database/sql"
 	"fmt"
-	"log"
-
 	"github.com/google/uuid"
-
 	"github.com/kasbuunk/microservice/auth"
 )
 
@@ -24,24 +20,49 @@ func New(db *sql.DB) auth.UserRepository {
 	}
 }
 
+func (us UserRepository) List() ([]auth.User, error) {
+	users, err := selectAll(us.UserDB, tableName)
+	if err != nil {
+		return []auth.User{}, fmt.Errorf("listing users: %w", err)
+	}
+	return users, nil
+}
+
+func (us UserRepository) Delete(usr auth.User) error {
+	err := remove(us.UserDB, tableName, usr)
+	if err != nil {
+		return fmt.Errorf("deleting user: %w", err)
+	}
+	return nil
+}
+
 func (us UserRepository) Save(usr auth.User) (auth.User, error) {
-	// if id is set, update
-	if usr.ID.String() != "" {
-		updatedUser, err := updateByID(us.UserDB, tableName, usr)
+	// If id is set, update, because the entity exists in storage.
+	if !uuidIsEmpty(usr.ID) {
+		err := update(us.UserDB, tableName, usr)
 		if err != nil {
-			return usr, fmt.Errorf("updating user")
+			return auth.User{}, fmt.Errorf("updating user: %w", err)
 		}
-		return updatedUser, nil
+	} else {
+		// Create (save an id-less user).
+		err := insert(us.UserDB, tableName, usr)
+		if err != nil {
+			return auth.User{}, fmt.Errorf("inserting user: %w", err)
+		}
 	}
 
-	// if id is not set, create
+	savedUser, err := selectByUniqueField(us.UserDB, tableName, "email", string(usr.Email))
+	if err != nil {
+		return auth.User{}, fmt.Errorf("selecting inserted user: %w", err)
+	}
 
-	//if savedUser.ID.String() == "" {
-	//	return &user.User{}, fmt.Errorf("saving user: %w", err)
-	//}
-	return usr, nil
+	if uuidIsEmpty(savedUser.ID) {
+		return auth.User{}, fmt.Errorf("saved user has empty id")
+	}
+	return savedUser, nil
 }
-func (us UserRepository) User(id uuid.UUID) (auth.User, error) {
+
+func (us UserRepository) Load(id uuid.UUID) (auth.User, error) {
 	usr, err := selectByID(us.UserDB, tableName, id)
 	if err != nil {
 		return auth.User{}, fmt.Errorf("querying user by id: %w", err)
@@ -49,61 +70,9 @@ func (us UserRepository) User(id uuid.UUID) (auth.User, error) {
 	return usr, nil
 }
 
-func selectByID(db *sql.DB, table string, id uuid.UUID) (auth.User, error) {
-	rows, err := db.Query(
-		fmt.Sprintf(
-			"SELECT * FROM `%s` WHERE id = ? LIMIT 1;",
-			table,
-		),
-		id.String(),
-	)
-	if err != nil {
-		return auth.User{}, fmt.Errorf("querying db: %w", err)
+func uuidIsEmpty(id uuid.UUID) bool {
+	if id.ID() == 0 {
+		return true
 	}
-
-	// Candidate for generics. Replace the return 'user.User' type by a type parameter.
-	var obj auth.User
-	err = rows.Scan(obj)
-	if err != nil {
-		return auth.User{}, fmt.Errorf("scanning rows: %w", err)
-	}
-
-	return obj, nil
-}
-
-func updateByID(db *sql.DB, table string, obj auth.User) (auth.User, error) {
-	result, err := db.ExecContext(context.Background(),
-		fmt.Sprintf(
-			"UPDATE `%s` SET `%s` WHERE id = ?;",
-			table,
-			updateSetValues([]string{
-				"email",
-			},
-			),
-		),
-		string(obj.Email),
-		obj.ID.String(),
-	)
-	if err != nil {
-		return auth.User{}, fmt.Errorf("updating db: %w", err)
-	}
-
-	rows, err := result.RowsAffected()
-	if err != nil {
-		return auth.User{}, fmt.Errorf(" rows: %w", err)
-	}
-	if rows != 1 {
-		log.Fatalf("expected to affect 1 row, affected %d", rows)
-	}
-
-	return obj, nil
-}
-
-func updateSetValues(fields []string) string {
-	setString := "( "
-	for _, field := range fields {
-		setString = setString + fmt.Sprintf("%s = ?", field)
-	}
-	setString += " )"
-	return setString
+	return false
 }

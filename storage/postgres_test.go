@@ -2,25 +2,21 @@ package storage
 
 import (
 	"errors"
-	"os"
+	"github.com/kasbuunk/microservice/test"
 	"testing"
 )
 
 func getTestDB() Config {
-	host := os.Getenv("SVC_DB_HOST")
-	if host == "" {
-		host = "localhost"
-	}
 	return Config{
-		Host: host,
-		Port: 5432,
-		Name: "user_test",
-		User: "postgres",
-		Pass: "postgres",
+		Host: test.DBHost,
+		Port: test.DBPort,
+		Name: test.DBName,
+		User: test.DBUser,
+		Pass: test.DBPass,
 	}
 }
 
-// Given: test database is running on localhost:5432 with user/pass postgres.
+// Given: test database is running on localhost with the above configuration.
 func TestConnectDatabase(t *testing.T) {
 	// Connect to database. Includes a ping, so no further verification needed.
 	_, err := Connect(getTestDB())
