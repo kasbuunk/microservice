@@ -20,3 +20,19 @@ CREATE TABLE users(
   PRIMARY KEY(id)
 );
 EOF
+
+psql << EOF
+DROP DATABASE ${SVC_DB_NAME};
+CREATE DATABASE ${SVC_DB_NAME};
+
+\c ${SVC_DB_NAME};
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+CREATE TABLE users(
+  id uuid DEFAULT gen_random_uuid() NOT NULL,
+  email varchar(64) UNIQUE NOT NULL,
+  password_hash varchar(64) UNIQUE NOT NULL,
+  PRIMARY KEY(id)
+);
+EOF

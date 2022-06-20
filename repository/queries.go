@@ -3,10 +3,12 @@ package repository
 import (
 	"database/sql"
 	"fmt"
-	"github.com/google/uuid"
-	"github.com/kasbuunk/microservice/auth"
 	"log"
 	"strings"
+
+	"github.com/google/uuid"
+
+	"github.com/kasbuunk/microservice/api/auth"
 )
 
 const insertPrefix = "INSERT INTO"

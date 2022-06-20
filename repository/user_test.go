@@ -3,7 +3,7 @@ package repository
 import (
 	"testing"
 
-	"github.com/kasbuunk/microservice/auth"
+	"github.com/kasbuunk/microservice/api/auth"
 	"github.com/kasbuunk/microservice/storage"
 	"github.com/kasbuunk/microservice/test"
 )
@@ -93,7 +93,7 @@ func TestUserRepository_Update(t *testing.T) {
 	if err != nil {
 		t.Errorf("saving user: %v", err)
 	}
-	changedEmailField := auth.Email("mynew@email.address")
+	changedEmailField := auth.EmailAddress("mynew@email.address")
 	savedUser.Email = changedEmailField
 	changedUser, err := repo.Save(savedUser)
 	if err != nil {

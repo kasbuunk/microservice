@@ -12,7 +12,7 @@ test: build
 build: bin/app
 
 # TODO: build should not be phony, fix the pattern matching
-bin/app: *.go go.mod
+bin/app: go.mod
 	go build -o bin/app ./
 
 gqlgen:

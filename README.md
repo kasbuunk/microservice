@@ -33,9 +33,9 @@ The intent of this project is to provide an example microservice that is scalabl
 ## Domain-driven-design
 The core feature is to showcase a microservice architecture with an inward dependency direction of the following:
 
-### Domain core
+### Domain core (api/*)
 
-In this example, `auth` has any and all domain logic. It should use the ubiquitous language of the problem domain, and not include any technical implementation of how instances are stored or retrieved from the database, for example.
+In this example, `auth` has the domain logic. It should use the ubiquitous language of the problem domain, and not include any technical implementation of how instances are stored or retrieved from the database, for example.
 
 The api interface also has 'broker' clients if any side-effects need to be performed, like network calls to services in- or outside the cluster.
 
@@ -72,3 +72,12 @@ Publish/subscribe, event-driven architectures can also be implemented by startin
 
 It may either be included as a subpackage under the `server` package or the `auth` domain package, or be their parent. Since it does not include any domain-specific knowledge and mostly implements the interface to query databases, it will probably be included underneath the `server` package.
 
+## Evolutionary design
+
+Another goal of this project is to showcase how a microservice can be set up to modularise sets of functionality and invoke behaviour in other components through an interface, without the hassle of having maintaining multiple services. This can be useful in early stages of development, or when the time for breaking up a well-designed modularised monolith never comes.
+
+See how the `email` service could easily be a service on its own, but is abstracted away by a general `MessageBus` interface. It acts as a broker between services to send messages to each other.
+
+### Asynchronous vs Synchronous
+
+Currently, the implementation of how service modules communicate is done via asynchronous events. Implementing a synchronous request-response type of communication will be done in a future iteration.

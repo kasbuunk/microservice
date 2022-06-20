@@ -7,13 +7,13 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/kasbuunk/microservice/auth"
+	"github.com/kasbuunk/microservice/api/auth"
 	"github.com/kasbuunk/microservice/graph/generated"
 	"github.com/kasbuunk/microservice/graph/model"
 )
 
 func (r *mutationResolver) RegisterUser(ctx context.Context, input model.RegisterUserInput) (*auth.User, error) {
-	registeredUser, err := r.Auth.Register(auth.Email(input.Email), auth.Password(input.Password))
+	registeredUser, err := r.Auth.Register(auth.EmailAddress(input.Email), auth.Password(input.Password))
 	if err != nil {
 		return nil, fmt.Errorf("registering user: %w", err)
 	}
@@ -25,11 +25,13 @@ func (r *queryResolver) Users(ctx context.Context) ([]*auth.User, error) {
 }
 
 func (r *userResolver) ID(ctx context.Context, obj *auth.User) (string, error) {
-	panic(fmt.Errorf("not implemented"))
+	return "1023012", nil
+	//panic(fmt.Errorf("not implemented"))
 }
 
 func (r *userResolver) Email(ctx context.Context, obj *auth.User) (string, error) {
-	panic(fmt.Errorf("not implemented"))
+	return "gjlksdjfl", nil
+	//panic(fmt.Errorf("not implemented"))
 }
 
 // Mutation returns generated.MutationResolver implementation.

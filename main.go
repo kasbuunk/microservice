@@ -3,8 +3,10 @@ package main
 import (
 	"log"
 
-	"github.com/kasbuunk/microservice/auth"
+	"github.com/kasbuunk/microservice/api/auth"
+	"github.com/kasbuunk/microservice/api/email"
 	"github.com/kasbuunk/microservice/config"
+	"github.com/kasbuunk/microservice/events"
 	"github.com/kasbuunk/microservice/repository"
 	"github.com/kasbuunk/microservice/server"
 	"github.com/kasbuunk/microservice/storage"
@@ -21,9 +23,19 @@ func main() {
 		log.Fatalf("Connection to storage failed: %v", err)
 	}
 
-	repo := repository.New(db)
+	streams := []events.Stream{
+		"AUTH",
 
-	authService := auth.New(repo)
+		"EMAIL",
+	}
+	bus := events.NewMessageBus(streams)
+
+	userRepo := repository.New(db)
+	authService := auth.New(userRepo, bus)
+	go authService.Subscribe()
+
+	emailService := email.New(bus)
+	go emailService.Subscribe()
 
 	svc, err := server.New(conf.Server.GQLEndpoint, authService)
 	if err != nil {
@@ -34,4 +46,5 @@ func main() {
 	if err != nil {
 		log.Fatalf("Serving failed: %v", err)
 	}
+
 }
