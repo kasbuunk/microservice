@@ -6,7 +6,8 @@ import (
 	"github.com/kasbuunk/microservice/api/auth"
 	"github.com/kasbuunk/microservice/api/email"
 	"github.com/kasbuunk/microservice/config"
-	"github.com/kasbuunk/microservice/events"
+	"github.com/kasbuunk/microservice/event"
+	"github.com/kasbuunk/microservice/listener"
 	"github.com/kasbuunk/microservice/repository"
 	"github.com/kasbuunk/microservice/server"
 	"github.com/kasbuunk/microservice/storage"
@@ -23,21 +24,23 @@ func main() {
 		log.Fatalf("Connection to storage failed: %v", err)
 	}
 
-	streams := []events.Stream{
+	streams := []event.Stream{
 		"AUTH",
-
 		"EMAIL",
 	}
-	bus := events.NewMessageBus(streams)
+	bus := event.NewMessageBus(streams)
 
 	userRepo := repository.New(db)
-	authService := auth.New(userRepo, bus)
-	go authService.Subscribe()
 
-	emailService := email.New(bus)
-	go emailService.Subscribe()
+	authAPI := auth.New(userRepo, bus)
+	authSubscriber := listener.NewAuth(authAPI, bus)
+	go authSubscriber.Listen()
 
-	svc, err := server.New(conf.Server.GQLEndpoint, authService)
+	emailAPI := email.New(bus)
+	emailSubscriber := listener.NewEmail(emailAPI, bus)
+	go emailSubscriber.Listen()
+
+	svc, err := server.New(conf.Server.GQLEndpoint, authAPI)
 	if err != nil {
 		log.Fatalf("Initialisation of server failed: %v", err)
 	}
@@ -46,5 +49,4 @@ func main() {
 	if err != nil {
 		log.Fatalf("Serving failed: %v", err)
 	}
-
 }
