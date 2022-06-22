@@ -15,7 +15,8 @@ type API interface {
 
 // Service implements the API interface.
 type Service struct {
-	Bus event.Bus
+	Bus         event.Bus
+	EmailClient Client
 }
 
 func (s Service) Send() error {
@@ -31,6 +32,14 @@ func (s Service) Send() error {
 	return nil
 }
 
-func New(bus event.Bus) API {
-	return Service{Bus: bus}
+func New(bus event.Bus, emailClient Client) API {
+	return Service{
+		Bus:         bus,
+		EmailClient: emailClient}
+}
+
+type Address string
+
+type Client interface {
+	SendActivationLink(Address) error
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/kasbuunk/microservice/client/postmark"
 	"log"
 
 	"github.com/kasbuunk/microservice/api/auth"
@@ -30,20 +31,24 @@ func main() {
 	}
 	bus := event.NewMessageBus(streams)
 
+	// Initialise repositories and clients.
 	userRepo := repository.New(db)
+	emailClient := postmark.New(conf.Postmark)
 
 	authAPI := auth.New(userRepo, bus)
-	authSubscriber := listener.NewAuth(authAPI, bus)
-	go authSubscriber.Listen()
 
-	emailAPI := email.New(bus)
-	emailSubscriber := listener.NewEmail(emailAPI, bus)
-	go emailSubscriber.Listen()
+	emailAPI := email.New(bus, emailClient)
 
 	svc, err := server.New(conf.Server.GQLEndpoint, authAPI)
 	if err != nil {
 		log.Fatalf("Initialisation of server failed: %v", err)
 	}
+
+	authSubscriber := listener.NewAuth(authAPI, bus)
+	go authSubscriber.Listen()
+
+	emailSubscriber := listener.NewEmail(emailAPI, bus)
+	go emailSubscriber.Listen()
 
 	err = svc.Serve(conf.Server.Port)
 	if err != nil {
