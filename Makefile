@@ -16,4 +16,4 @@ bin/app: go.mod
 	go build -o bin/app ./
 
 gqlgen:
-	gqlgen
+	(cd input/server && gqlgen)

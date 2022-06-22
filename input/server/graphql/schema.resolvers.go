@@ -8,8 +8,8 @@ import (
 	"fmt"
 
 	"github.com/kasbuunk/microservice/api/auth"
-	"github.com/kasbuunk/microservice/graph/generated"
-	"github.com/kasbuunk/microservice/graph/model"
+	"github.com/kasbuunk/microservice/input/server/graphql/generated"
+	"github.com/kasbuunk/microservice/input/server/graphql/model"
 )
 
 func (r *mutationResolver) RegisterUser(ctx context.Context, input model.RegisterUserInput) (*auth.User, error) {
