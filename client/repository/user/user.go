@@ -73,8 +73,5 @@ func (us UserRepository) Load(id uuid.UUID) (auth.User, error) {
 }
 
 func uuidIsEmpty(id uuid.UUID) bool {
-	if id.ID() == 0 {
-		return true
-	}
-	return false
+	return id.ID() == 0
 }

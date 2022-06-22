@@ -23,7 +23,7 @@ func (s Service) Send() error {
 	msg := event.Message{
 		Stream:  "EMAIL",
 		Subject: "ACTIVATION_REQUEST_SENT",
-		Body:    event.Body(fmt.Sprintf("new user registered with email")),
+		Body:    event.Body("new user registered with email"),
 	}
 	err := s.Bus.Publish(msg)
 	if err != nil {

@@ -30,6 +30,9 @@ func NewUser(email EmailAddress, password Password) (User, error) {
 		return user, err
 	}
 	err = validatePassword(password)
+	if err != nil {
+		return user, err
+	}
 	passwordHash, err := hashPassword(password)
 	if err != nil {
 		return user, err
@@ -53,7 +56,7 @@ func validateEmail(email EmailAddress) error {
 }
 
 func validatePassword(_ Password) error {
-	return fmt.Errorf("password invalid")
+	return nil
 }
 
 func hashPassword(password Password) (PasswordHash, error) {
