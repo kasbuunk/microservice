@@ -10,20 +10,28 @@ const ExpectedGotFormat string = "expected: '%v'; got: '%v'"
 func TestNewConfig(t *testing.T) {
 	port := 16543
 	gqlEndpoint := "/my-gql-endpoint"
+
 	dbHost := "thishost.me"
 	dbPort := 2347
 	dbName := "testname"
 	dbUser := "thisuser"
 	dbPass := "dontlook"
 
+	serverToken := "myservertoken"
+	accountToken := "myaccounttoken"
+
 	// Set or override environment variables.
 	t.Setenv("SVC_SERVER_PORT", strconv.Itoa(port))
 	t.Setenv("SVC_SERVER_GQLENDPOINT", gqlEndpoint)
+
 	t.Setenv("SVC_DB_HOST", dbHost)
 	t.Setenv("SVC_DB_PORT", strconv.Itoa(dbPort))
 	t.Setenv("SVC_DB_NAME", dbName)
 	t.Setenv("SVC_DB_USER", dbUser)
 	t.Setenv("SVC_DB_PASS", dbPass)
+
+	t.Setenv("SVC_POSTMARK_SERVERTOKEN", serverToken)
+	t.Setenv("SVC_POSTMARK_ACCOUNTTOKEN", accountToken)
 
 	conf, err := New()
 	if err != nil {

@@ -4,6 +4,7 @@
 package config
 
 import (
+	"github.com/kasbuunk/microservice/client/postmark"
 	"github.com/kelseyhightower/envconfig"
 
 	"github.com/kasbuunk/microservice/server"
@@ -14,8 +15,9 @@ const envPrefix = "svc"
 
 // Config includes the data fields that the other microservice components need to set up.
 type Config struct {
-	Server server.Config
-	DB     storage.Config
+	Server   server.Config
+	DB       storage.Config
+	Postmark postmark.Config
 }
 
 // New takes its 'input' from environment variables and returns everything  the microservice

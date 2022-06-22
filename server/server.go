@@ -30,7 +30,7 @@ type Port int
 type GQLEndpoint string
 
 // New takes an endpoint  returns a new server
-func New(endpoint GQLEndpoint, auth auth.Auth) (Server, error) {
+func New(endpoint GQLEndpoint, auth auth.API) (Server, error) {
 	srv := handler.NewDefaultServer(
 		generated.NewExecutableSchema(
 			generated.Config{
