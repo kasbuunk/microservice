@@ -35,23 +35,27 @@ func main() {
 	userRepo := user.New(db)
 	emailClient := postmark.New(conf.Postmark)
 
+	// Initialise APIs
 	authAPI := auth.New(userRepo, bus)
-
 	emailAPI := email.New(bus, emailClient)
 
-	svc, err := server.New(conf.Server.GQLEndpoint, authAPI)
+	// Initialise sources of input: servers and listeners.
+	authSubscriber := listener.NewAuth(authAPI, bus)
+	emailSubscriber := listener.NewEmail(emailAPI, bus)
+
+	authServer, err := server.New(conf.Server.GQLEndpoint, authAPI)
 	if err != nil {
 		log.Fatalf("Initialisation of server failed: %v", err)
 	}
 
-	authSubscriber := listener.NewAuth(authAPI, bus)
-	go authSubscriber.Listen()
-
-	emailSubscriber := listener.NewEmail(emailAPI, bus)
-	go emailSubscriber.Listen()
-
-	err = svc.Serve(conf.Server.Port)
+	// Start process that listens for requests.
+	err = authServer.Serve(conf.Server.Port)
 	if err != nil {
 		log.Fatalf("Serving failed: %v", err)
 	}
+
+	// Start processes that listen for events.
+	go authSubscriber.Listen()
+	go emailSubscriber.Listen()
+
 }
