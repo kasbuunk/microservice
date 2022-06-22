@@ -1,10 +1,10 @@
-package repository
+package user
 
 import (
 	"testing"
 
 	"github.com/kasbuunk/microservice/api/auth"
-	"github.com/kasbuunk/microservice/storage"
+	"github.com/kasbuunk/microservice/client/repository/storage"
 	"github.com/kasbuunk/microservice/test"
 )
 

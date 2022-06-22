@@ -1,17 +1,17 @@
 package main
 
 import (
-	"github.com/kasbuunk/microservice/client/postmark"
 	"log"
 
 	"github.com/kasbuunk/microservice/api/auth"
 	"github.com/kasbuunk/microservice/api/email"
+	"github.com/kasbuunk/microservice/client/postmark"
+	"github.com/kasbuunk/microservice/client/repository/storage"
+	"github.com/kasbuunk/microservice/client/repository/user"
 	"github.com/kasbuunk/microservice/config"
 	"github.com/kasbuunk/microservice/event"
-	"github.com/kasbuunk/microservice/listener"
-	"github.com/kasbuunk/microservice/repository"
-	"github.com/kasbuunk/microservice/server"
-	"github.com/kasbuunk/microservice/storage"
+	"github.com/kasbuunk/microservice/input/listener"
+	"github.com/kasbuunk/microservice/input/server"
 )
 
 func main() {
@@ -32,7 +32,7 @@ func main() {
 	bus := event.NewMessageBus(streams)
 
 	// Initialise repositories and clients.
-	userRepo := repository.New(db)
+	userRepo := user.New(db)
 	emailClient := postmark.New(conf.Postmark)
 
 	authAPI := auth.New(userRepo, bus)

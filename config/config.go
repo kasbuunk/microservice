@@ -4,11 +4,11 @@
 package config
 
 import (
-	"github.com/kasbuunk/microservice/client/postmark"
 	"github.com/kelseyhightower/envconfig"
 
-	"github.com/kasbuunk/microservice/server"
-	"github.com/kasbuunk/microservice/storage"
+	"github.com/kasbuunk/microservice/client/postmark"
+	"github.com/kasbuunk/microservice/client/repository/storage"
+	"github.com/kasbuunk/microservice/input/server"
 )
 
 const envPrefix = "svc"

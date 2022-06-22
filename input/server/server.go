@@ -11,8 +11,8 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 
 	"github.com/kasbuunk/microservice/api/auth"
-	"github.com/kasbuunk/microservice/graph"
-	"github.com/kasbuunk/microservice/graph/generated"
+	"github.com/kasbuunk/microservice/input/server/graphql"
+	"github.com/kasbuunk/microservice/input/server/graphql/generated"
 )
 
 type Server interface {
