@@ -2,7 +2,7 @@ package auth
 
 import (
 	"fmt"
-	
+
 	"github.com/golang-jwt/jwt"
 
 	"github.com/kasbuunk/microservice/event"
@@ -74,6 +74,5 @@ func (s Service) Login(email EmailAddress, password Password) (jwt.Token, error)
 	//	return jwt.Token{}, fmt.Errorf("password does not match")
 	// }
 
-	panic("Implement me!")
 	return jwt.Token{}, nil
 }

@@ -3,4 +3,4 @@ set -e
 
 source local.env
 
-go test ./...
+make test

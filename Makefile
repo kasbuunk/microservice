@@ -1,19 +1,23 @@
 phony: all
 
+all: gqlgen build lint test
+
 .PHONY: lint
-lint: build
+lint:
 	golangci-lint run -v ./...
 
 .PHONY: test
 test: build
 	go test ./...
 
-.PHONY: build
 build: bin/app
 
-# TODO: build should not be phony, fix the pattern matching
-bin/app: go.mod
+bin/app: $(shell find . -name "*.go")
 	go build -o bin/app ./
 
 gqlgen:
 	(cd input/server && gqlgen)
+
+clean:
+	go clean
+	rm ${BINARY_NAME}

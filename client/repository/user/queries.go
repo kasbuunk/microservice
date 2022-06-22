@@ -12,7 +12,6 @@ import (
 )
 
 const insertPrefix = "INSERT INTO"
-const deletePrefix = "DELETE FROM"
 const updatePrefix = "UPDATE"
 
 const insertFmt = "(%s) VALUES (%s)"
