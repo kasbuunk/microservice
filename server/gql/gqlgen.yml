@@ -55,5 +55,5 @@ models:
       - github.com/99designs/gqlgen/graphql.Int64
       - github.com/99designs/gqlgen/graphql.Int32
   User:
-    model: github.com/kasbuunk/microservice/api/auth.User # go import path to the User struct above
+    model: github.com/kasbuunk/microservice/api/auth/models.User # go import path to the User struct above
 

@@ -1,5 +1,8 @@
 phony: all
 
+BINARY_NAME = bin/app
+GQLGEN_DIR = server/gql
+
 all: gqlgen build lint test
 
 .PHONY: lint
@@ -10,13 +13,13 @@ lint:
 test: build
 	go test ./...
 
-build: bin/app
+build: ${BINARY_NAME}
 
-bin/app: $(shell find . -name "*.go")
-	go build -o bin/app ./
+${BINARY_NAME}: $(shell find . -name "*.go")
+	go build -o ${BINARY_NAME} ./
 
 gqlgen:
-	(cd input/server && gqlgen)
+	(cd ${GQLGEN_DIR} && gqlgen)
 
 clean:
 	go clean

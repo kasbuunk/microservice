@@ -1,6 +1,6 @@
 // Package server exposes the Server interface that runs and listens for requests.
 // It accepts configuration on where to run and how to store and retrieve entities.
-package server
+package gqlserver
 
 import (
 	"fmt"
@@ -11,8 +11,8 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 
 	"github.com/kasbuunk/microservice/api/auth"
-	"github.com/kasbuunk/microservice/input/server/graphql"
-	"github.com/kasbuunk/microservice/input/server/graphql/generated"
+	"github.com/kasbuunk/microservice/server/gql/graphql"
+	"github.com/kasbuunk/microservice/server/gql/graphql/generated"
 )
 
 type Server interface {

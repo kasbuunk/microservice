@@ -1,14 +1,16 @@
-package user
+package userrepo
 
 import (
+	"github.com/kasbuunk/microservice/api/auth/models"
+	"github.com/kasbuunk/microservice/api/auth/user"
 	"testing"
 
-	"github.com/kasbuunk/microservice/api/auth"
+	"github.com/kasbuunk/microservice/api/client"
 	"github.com/kasbuunk/microservice/client/repository/storage"
 	"github.com/kasbuunk/microservice/test"
 )
 
-func getTestRepo(t *testing.T) auth.UserRepository {
+func getTestRepo(t *testing.T) client.UserRepository {
 	conf := storage.Config{
 		Host: test.DBHost,
 		Port: test.DBPort,
@@ -24,7 +26,7 @@ func getTestRepo(t *testing.T) auth.UserRepository {
 	return repo
 }
 
-func cleanupRepo(t *testing.T, repo auth.UserRepository) {
+func cleanupRepo(t *testing.T, repo client.UserRepository) {
 	users, err := repo.List()
 	if err != nil {
 		t.Errorf("listing users: %v", err)
@@ -52,7 +54,7 @@ func TestUserRepository_Save(t *testing.T) {
 	repo := getTestRepo(t)
 	defer cleanupRepo(t, repo)
 
-	user, err := auth.NewUser("Hex@amle.com", "jsdklfjsdlk2342A!")
+	user, err := user.NewUser("Hex@amle.com", "jsdklfjsdlk2342A!")
 	if err != nil {
 		t.Errorf("instantiating new user: %v", err)
 	}
@@ -70,7 +72,7 @@ func TestUserRepository_Delete(t *testing.T) {
 	repo := getTestRepo(t)
 	defer cleanupRepo(t, repo)
 
-	newUser := auth.User{Email: "tnei@nrseit.sitm", PasswordHash: "rnsteinrisnter"}
+	newUser := models.User{Email: "tnei@nrseit.sitm", PasswordHash: "rnsteinrisnter"}
 
 	savedUser, err := repo.Save(newUser)
 	if err != nil {
@@ -87,13 +89,13 @@ func TestUserRepository_Update(t *testing.T) {
 	repo := getTestRepo(t)
 	defer cleanupRepo(t, repo)
 
-	newUser := auth.User{Email: "trstrs@nrseit.sitm", PasswordHash: "rstrstrs"}
+	newUser := models.User{Email: "trstrs@nrseit.sitm", PasswordHash: "rstrstrs"}
 
 	savedUser, err := repo.Save(newUser)
 	if err != nil {
 		t.Errorf("saving user: %v", err)
 	}
-	changedEmailField := auth.EmailAddress("mynew@email.address")
+	changedEmailField := models.EmailAddress("mynew@email.address")
 	savedUser.Email = changedEmailField
 	changedUser, err := repo.Save(savedUser)
 	if err != nil {
@@ -133,12 +135,12 @@ func TestUserRepository(t *testing.T) {
 
 	cases := []struct {
 		name          string
-		user          auth.User
+		user          models.User
 		expectedError error
 	}{
 		{
 			"CorrectUser",
-			auth.User{Email: "user@example.com", PasswordHash: "rmsetmremstrmsitmsreitm"},
+			models.User{Email: "user@example.com", PasswordHash: "rmsetmremstrmsitmsreitm"},
 			nil,
 		},
 	}
