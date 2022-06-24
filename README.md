@@ -8,11 +8,15 @@ The intent of this project is to provide an example microservice that is _scalab
 
 All technical implementation is initialised in the `main` function and injected as dependencies in their `API` interfaces, which allow the domain core to simply call a method that will figure out how to do. Hence, the domain core can focus on what should be done. It's easy to refactor implementation details, easy to test and more expressive.
 
-## Getting started
+## Evolutionary design
 
-In your deployment pipeline, build the service binary using the make target and provide as entrypoint in a containerized environment of your choice.
+Another goal of this project is to showcase how a microservice can be set up to modularise sets of functionality and invoke behaviour in other components through an interface, without the hassle of having maintaining multiple services. One can choose a single service binary with multiple `API`s, located in `api/`. This can be useful in early stages of development, or when the time for breaking up a well-designed modularised monolith never comes.
 
-### Development
+One can freely decide to promote a service's `api` when there are reasons to do so. See how the `email` api could easily be extrapolated as a service on its own. It acts as a broker between services to send messages to each other. This process should be as easy as moving the api to a separate process and replace the behaviour invocation implementation to do a network call or configure the event bus, depending on the communication pattern of the application. The intent is to have a clean architecture, such that the developer may easily promote an api to be its own microservice and just change the implementation of the interface - through which other apis would interact with it - to be a client's network call or event over the application's event store.
+
+## Installation & development
+
+In your deployment pipeline, run `make` to build the service binary `bin/app` and provide it as entrypoint in an environment of your choice.
 
 `cp sample.env local.env` and change accordingly.
 
@@ -22,12 +26,6 @@ In order to interate on this project, install the following:
 - `gqlgen`
 
 Have a postgres instance running and run the `scripts/db.sh` to create database and tables as configured in local.env.
-
-## Evolutionary design
-
-Another goal of this project is to showcase how a microservice can be set up to modularise sets of functionality and invoke behaviour in other components through an interface, without the hassle of having maintaining multiple services. One can choose a single service binary with multiple `API`s, located in `api/`. This can be useful in early stages of development, or when the time for breaking up a well-designed modularised monolith never comes. 
-
-One can freely decide to promote a service's `api` when there are reasons to do so. See how the `email` api could easily be extrapolated as a service on its own. It acts as a broker between services to send messages to each other. This process should be as easy as moving the api to a separate process and replace the behaviour invocation implementation to do a network call or configure the event bus, depending on the communication pattern of the application. The intent is to have a clean architecture, such that the developer may easily promote an api to be its own microservice and just change the implementation of the interface - through which other apis would interact with it - to be a client's network call or event over the application's event store.
 
 ### Asynchronous vs Synchronous
 
