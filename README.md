@@ -4,9 +4,7 @@ _This project is licensed under the MIT License._
 
 ## What & why
 
-The intent of this project is to provide an example microservice that is scalable in terms of complexity. In order to achieve that, it has implements Domain-Driven Design patterns for separation of concerns. The domain core is located in the `api` directory, exposing some user-related logic. It explicitly does not import any non-domain package.
-
-The microservice in this example exposes a graphql api over http, although the very purpose of this project is to design a microservice to be agnostic of how it receives its invocations of behaviour.
+The intent of this project is to provide an example microservice that is _scalable in terms of complexity_. In order to achieve that, it applies Domain-Driven Design patterns for separation of concerns. The example exposes a graphql api over http, although the very purpose of this project is to showcase a microservice that is agnostic of the source that invokes its behaviour.
 
 All technical implementation is initialised in the `main` function and injected as dependencies in their `API` interfaces, which allow the domain core to simply call a method that will figure out how to do. Hence, the domain core can focus on what should be done. It's easy to refactor implementation details, easy to test and more expressive.
 
