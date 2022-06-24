@@ -6,18 +6,18 @@ package config
 import (
 	"github.com/kelseyhightower/envconfig"
 
-	"github.com/kasbuunk/microservice/client/postmark"
+	"github.com/kasbuunk/microservice/client/email"
 	"github.com/kasbuunk/microservice/client/repository/storage"
-	"github.com/kasbuunk/microservice/input/server"
+	"github.com/kasbuunk/microservice/server/gql"
 )
 
 const envPrefix = "svc"
 
 // Config includes the data fields that the other microservice components need to set up.
 type Config struct {
-	Server   server.Config
+	Server   gqlserver.Config
 	DB       storage.Config
-	Postmark postmark.Config
+	Postmark emailclient.Config
 }
 
 // New takes its 'input' from environment variables and returns everything  the microservice

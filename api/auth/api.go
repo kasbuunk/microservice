@@ -5,7 +5,9 @@ import (
 
 	"github.com/golang-jwt/jwt"
 
-	"github.com/kasbuunk/microservice/event"
+	"github.com/kasbuunk/microservice/api/auth/models"
+	"github.com/kasbuunk/microservice/api/auth/user"
+	"github.com/kasbuunk/microservice/api/client"
 )
 
 // API provides the interface that maps closely to however you wish to communicate with external components.
@@ -13,8 +15,8 @@ import (
 // Other contexts, or 'domains', should communicate with each other through their APIs.
 type API interface {
 	// Register inserts a new account into the repository, that has yet to be activated.
-	Register(EmailAddress, Password) (User, error)
-	Login(EmailAddress, Password) (jwt.Token, error)
+	Register(models.EmailAddress, models.Password) (models.User, error)
+	Login(models.EmailAddress, models.Password) (jwt.Token, error)
 	// ChangePassword(UserRepository, Password, Password, Password) (User, error)
 	// ActivateAccount(UserRepository) (User, error)
 	// Users takes a repo and a list of filters to return a list of Users.
@@ -28,45 +30,45 @@ type API interface {
 // added here so the domain core remains pure and agnostic of any calls over the network, including other
 // microservices that are part of the same application.
 type Service struct {
-	User      UserRepository
-	Publisher event.Publisher
+	UserRepo  client.UserRepository
+	BusClient client.EventBusClient
 }
 
-func New(repo UserRepository, pub event.Publisher) API {
+func New(repo client.UserRepository, bus client.EventBusClient) API {
 	return Service{
-		User:      repo,
-		Publisher: pub,
+		UserRepo:  repo,
+		BusClient: bus,
 	}
 }
 
-func (s Service) Register(email EmailAddress, password Password) (User, error) {
-	user, err := NewUser(email, password)
+func (s Service) Register(email models.EmailAddress, password models.Password) (models.User, error) {
+	usr, err := user.NewUser(email, password)
 	if err != nil {
-		return user, fmt.Errorf("saving user: %w", err)
+		return usr, fmt.Errorf("saving user: %w", err)
 	}
 
-	savedUser, err := s.User.Save(user)
+	savedUser, err := s.UserRepo.Save(usr)
 	if err != nil {
 		return savedUser, fmt.Errorf("saving user: %w", err)
 	}
 
 	// Invoke behaviour in Email service
-	msg := event.Message{
+	msg := client.Event{
 		Stream:  "AUTH",
 		Subject: "USER_REGISTERED",
-		Body:    event.Body(fmt.Sprintf("new user registered with email %s", user.Email)),
+		Body:    client.Body(fmt.Sprintf("new user registered with email %s", usr.Email)),
 	}
-	err = s.Publisher.Publish(msg)
+	err = s.BusClient.Publish(msg)
 	if err != nil {
 		return savedUser, fmt.Errorf("publishing msg: %w", err)
 	}
 	return savedUser, nil
 }
 
-func (s Service) Login(email EmailAddress, password Password) (jwt.Token, error) {
+func (s Service) Login(email models.EmailAddress, password models.Password) (jwt.Token, error) {
 	// TODO: Add method to repo to retrieve user by email, or add filter to List users and use the first row.
 	// user := s.Users
-	_, err := hashPassword(password)
+	_, err := user.HashPassword(password)
 	if err != nil {
 		panic("handle me")
 	}

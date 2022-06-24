@@ -1,14 +1,13 @@
-package user
+package userrepo
 
 import (
 	"database/sql"
 	"fmt"
+	"github.com/kasbuunk/microservice/api/auth/models"
 	"log"
 	"strings"
 
 	"github.com/google/uuid"
-
-	"github.com/kasbuunk/microservice/api/auth"
 )
 
 const insertPrefix = "INSERT INTO"
@@ -52,7 +51,7 @@ func updateQuery(table string, fields fieldValues, where string) string {
 	return queryString
 }
 
-func insert(db *sql.DB, table string, usr auth.User) error {
+func insert(db *sql.DB, table string, usr models.User) error {
 	fieldValues := map[string]string{
 		"email":         "$1",
 		"password_hash": "$2",
@@ -65,7 +64,7 @@ func insert(db *sql.DB, table string, usr auth.User) error {
 	return nil
 }
 
-func remove(db *sql.DB, table string, usr auth.User) error {
+func remove(db *sql.DB, table string, usr models.User) error {
 	query := fmt.Sprintf("DELETE FROM %s WHERE id = $1;", table)
 	err := executeQuery(db, query, usr.ID)
 	if err != nil {
@@ -74,7 +73,7 @@ func remove(db *sql.DB, table string, usr auth.User) error {
 	return nil
 }
 
-func update(db *sql.DB, table string, usr auth.User) error {
+func update(db *sql.DB, table string, usr models.User) error {
 	fieldValues := map[string]string{
 		"email":         "$1",
 		"password_hash": "$2",
@@ -114,8 +113,8 @@ func executeQuery(db *sql.DB, query string, params ...interface{}) error {
 	return nil
 }
 
-func selectAll(db *sql.DB, table string) ([]auth.User, error) {
-	var users []auth.User
+func selectAll(db *sql.DB, table string) ([]models.User, error) {
+	var users []models.User
 
 	query := fmt.Sprintf(
 		"SELECT id, email, password_hash FROM %s;",
@@ -136,7 +135,7 @@ func selectAll(db *sql.DB, table string) ([]auth.User, error) {
 
 	// Loop through rows, using Scan to assign column data to struct fields.
 	for rows.Next() {
-		var user auth.User
+		var user models.User
 		err := rows.Scan(&user.ID, &user.Email, &user.PasswordHash)
 		if err != nil {
 			return nil, fmt.Errorf("scanning rows: %w", err)
@@ -151,8 +150,8 @@ func selectAll(db *sql.DB, table string) ([]auth.User, error) {
 	return users, nil
 }
 
-func selectByUniqueField(db *sql.DB, table, field, value string) (auth.User, error) {
-	var user auth.User
+func selectByUniqueField(db *sql.DB, table, field, value string) (models.User, error) {
+	var user models.User
 	query := fmt.Sprintf(
 		"SELECT * FROM %s WHERE %s = $1;",
 		table,
@@ -170,10 +169,10 @@ func selectByUniqueField(db *sql.DB, table, field, value string) (auth.User, err
 	}
 }
 
-func selectByID(db *sql.DB, table string, id uuid.UUID) (auth.User, error) {
+func selectByID(db *sql.DB, table string, id uuid.UUID) (models.User, error) {
 	user, err := selectByUniqueField(db, table, "id", id.String())
 	if err != nil {
-		return auth.User{}, fmt.Errorf("selecting id: %w", err)
+		return models.User{}, fmt.Errorf("selecting id: %w", err)
 	}
 	return user, nil
 }
