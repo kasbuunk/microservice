@@ -1,4 +1,4 @@
-// Package server exposes the Server interface that runs and listens for requests.
+// Package gqlserver exposes the Server interface that runs and listens for requests.
 // It accepts configuration on where to run and how to store and retrieve entities.
 package gqlserver
 

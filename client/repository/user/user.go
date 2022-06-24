@@ -3,10 +3,10 @@ package userrepo
 import (
 	"database/sql"
 	"fmt"
-	"github.com/kasbuunk/microservice/api/auth/models"
 
 	"github.com/google/uuid"
 
+	"github.com/kasbuunk/microservice/api/auth/models"
 	"github.com/kasbuunk/microservice/api/client"
 )
 
