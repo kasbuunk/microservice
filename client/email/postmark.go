@@ -4,10 +4,11 @@ package emailclient
 
 import (
 	"fmt"
-	"github.com/kasbuunk/microservice/api/client"
-	"github.com/kasbuunk/microservice/api/email/models"
 
 	"github.com/keighl/postmark"
+
+	"github.com/kasbuunk/microservice/api/client"
+	"github.com/kasbuunk/microservice/api/email/models"
 )
 
 type Config struct {

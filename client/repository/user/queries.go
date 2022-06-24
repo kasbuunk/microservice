@@ -3,11 +3,12 @@ package userrepo
 import (
 	"database/sql"
 	"fmt"
-	"github.com/kasbuunk/microservice/api/auth/models"
 	"log"
 	"strings"
 
 	"github.com/google/uuid"
+
+	"github.com/kasbuunk/microservice/api/auth/models"
 )
 
 const insertPrefix = "INSERT INTO"
