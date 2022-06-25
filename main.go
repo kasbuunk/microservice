@@ -4,7 +4,7 @@ import (
 	"log"
 
 	"github.com/kasbuunk/microservice/api/auth"
-	"github.com/kasbuunk/microservice/api/client"
+	"github.com/kasbuunk/microservice/api/client/eventbus"
 	"github.com/kasbuunk/microservice/api/email"
 	"github.com/kasbuunk/microservice/client/email"
 	"github.com/kasbuunk/microservice/client/eventbus"
@@ -30,22 +30,22 @@ func main() {
 	// Initialise clients.
 	userRepo := userrepo.New(db)
 	emailClient := emailclient.New(conf.Postmark)
-	busClient := eventbusclient.New([]client.Stream{
+	eventBusClient := eventbusclient.New([]eventbus.Stream{
 		"AUTH",
 		"EMAIL",
 	})
 
 	// Initialise APIs that implement all core domain logic, injecting dependencies.
-	authAPI := auth.New(userRepo, busClient)
-	emailAPI := email.New(busClient, emailClient)
+	authAPI := auth.New(userRepo, eventBusClient)
+	emailAPI := email.New(eventBusClient, emailClient)
 
 	// Initialise sources of input: servers and listeners.
-	authHandler := authhandler.New(authAPI, busClient)
-	emailHandler := emailhandler.New(emailAPI, busClient)
+	authEventHandler := authhandler.New(authAPI, eventBusClient)
+	emailEventHandler := emailhandler.New(emailAPI, eventBusClient)
 
 	// Start processes that listen for events.
-	go authHandler.Handle()
-	go emailHandler.Handle()
+	go authEventHandler.Handle()
+	go emailEventHandler.Handle()
 
 	// Initialise Graphql http server.
 	authServer, err := gqlserver.New(conf.GQLServer.Endpoint, authAPI)

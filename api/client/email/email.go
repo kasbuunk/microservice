@@ -1,7 +1,7 @@
-package client
+package email
 
 import "github.com/kasbuunk/microservice/api/email/models"
 
-type EmailClient interface {
+type Client interface {
 	SendActivationLink(models.Address) error
 }

@@ -7,7 +7,7 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/kasbuunk/microservice/api/auth/models"
-	"github.com/kasbuunk/microservice/api/client"
+	"github.com/kasbuunk/microservice/api/client/userrepo"
 )
 
 const tableName = "users"
@@ -17,7 +17,7 @@ type UserRepository struct {
 	UserDB *sql.DB
 }
 
-func New(db *sql.DB) client.UserRepository {
+func New(db *sql.DB) userrepo.Client {
 	return UserRepository{
 		UserDB: db,
 	}

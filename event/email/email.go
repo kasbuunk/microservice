@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/kasbuunk/microservice/api/client"
+	"github.com/kasbuunk/microservice/api/client/eventbus"
 	"github.com/kasbuunk/microservice/api/email"
 	"github.com/kasbuunk/microservice/event"
 )
 
 type EventHandler struct {
 	API       email.API
-	BusClient client.EventBusClient
+	BusClient eventbus.Client
 }
 
 // Handle listens for events that match the Stream or Subject and invokes the appropriate domain behaviour.
@@ -29,7 +29,7 @@ func (s EventHandler) Handle() {
 	}
 }
 
-func New(api email.API, bus client.EventBusClient) event.Handler {
+func New(api email.API, bus eventbus.Client) event.Handler {
 	return EventHandler{
 		API:       api,
 		BusClient: bus,

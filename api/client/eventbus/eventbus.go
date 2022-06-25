@@ -1,10 +1,10 @@
-// Package client contains all interfaces the APIs need to implement their domain logic. The implementation of these
+// Package eventbus contains all interfaces the APIs need to implement their domain logic. The implementation of these
 // clients are injected as dependencies upon initialisation of APIs.
-package client
+package eventbus
 
-// EventBusClient offers the caller the interface to Subscribe or Publish to the EventBus, encapsulating its
+// Client offers the caller the interface to Subscribe or Publish to the EventBus, encapsulating its
 // technical implementation.
-type EventBusClient interface {
+type Client interface {
 	Subscribe(Stream, Subject) (EventBus, error)
 	Publish(Event) error
 }
