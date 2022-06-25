@@ -48,13 +48,13 @@ func main() {
 	go emailSubscriber.SubscribeToEvents()
 
 	// Initialise Graphql http server.
-	authServer, err := gqlserver.New(conf.Server.GQLEndpoint, authAPI)
+	authServer, err := gqlserver.New(conf.GQLServer.Endpoint, authAPI)
 	if err != nil {
 		log.Fatalf("Initialisation of server failed: %v", err)
 	}
 
 	// Start process that serves GraphQL requests.
-	err = authServer.Serve(conf.Server.Port)
+	err = authServer.Serve(conf.GQLServer.Port)
 	if err != nil {
 		log.Fatalf("Serving failed: %v", err)
 	}

@@ -21,8 +21,8 @@ func TestNewConfig(t *testing.T) {
 	accountToken := "myaccounttoken"
 
 	// Set or override environment variables.
-	t.Setenv("SVC_SERVER_PORT", strconv.Itoa(port))
-	t.Setenv("SVC_SERVER_GQLENDPOINT", gqlEndpoint)
+	t.Setenv("SVC_GQLSERVER_PORT", strconv.Itoa(port))
+	t.Setenv("SVC_GQLSERVER_ENDPOINT", gqlEndpoint)
 
 	t.Setenv("SVC_DB_HOST", dbHost)
 	t.Setenv("SVC_DB_PORT", strconv.Itoa(dbPort))
@@ -38,11 +38,11 @@ func TestNewConfig(t *testing.T) {
 		t.Error("getting config", err)
 	}
 
-	if int(conf.Server.Port) != port {
-		t.Errorf(ExpectedGotFormat, port, conf.Server.Port)
+	if int(conf.GQLServer.Port) != port {
+		t.Errorf(ExpectedGotFormat, port, conf.GQLServer.Port)
 	}
-	if string(conf.Server.GQLEndpoint) != gqlEndpoint {
-		t.Errorf(ExpectedGotFormat, gqlEndpoint, conf.Server.GQLEndpoint)
+	if string(conf.GQLServer.Endpoint) != gqlEndpoint {
+		t.Errorf(ExpectedGotFormat, gqlEndpoint, conf.GQLServer.Endpoint)
 	}
 	if conf.DB.Host != dbHost {
 		t.Errorf(ExpectedGotFormat, dbHost, conf.DB.Host)

@@ -11,26 +11,22 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 
 	"github.com/kasbuunk/microservice/api/auth"
+	"github.com/kasbuunk/microservice/server"
 	"github.com/kasbuunk/microservice/server/gql/graphql"
 	"github.com/kasbuunk/microservice/server/gql/graphql/generated"
 )
 
-type Server interface {
-	Serve(Port) error
-}
-
 type Service struct{}
 
 type Config struct {
-	Port        Port
-	GQLEndpoint GQLEndpoint
+	Port     server.Port
+	Endpoint Endpoint
 }
 
-type Port int
-type GQLEndpoint string
+type Endpoint string
 
 // New takes an endpoint  returns a new server
-func New(endpoint GQLEndpoint, auth auth.API) (Server, error) {
+func New(endpoint Endpoint, auth auth.API) (server.Server, error) {
 	srv := handler.NewDefaultServer(
 		generated.NewExecutableSchema(
 			generated.Config{
@@ -44,7 +40,7 @@ func New(endpoint GQLEndpoint, auth auth.API) (Server, error) {
 	return Service{}, nil
 }
 
-func (s Service) Serve(port Port) error {
+func (s Service) Serve(port server.Port) error {
 	log.Printf("connect to http://localhost:%d/ for GraphQL playground", port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), nil))
 	return nil
