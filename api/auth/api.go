@@ -7,8 +7,8 @@ import (
 
 	"github.com/kasbuunk/microservice/api/auth/models"
 	"github.com/kasbuunk/microservice/api/auth/user"
-	"github.com/kasbuunk/microservice/api/client/eventbus"
-	"github.com/kasbuunk/microservice/api/client/userrepo"
+	"github.com/kasbuunk/microservice/client/eventbus"
+	"github.com/kasbuunk/microservice/client/userrepo"
 )
 
 // API provides the interface that maps closely to however you wish to communicate with external components.

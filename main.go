@@ -4,12 +4,12 @@ import (
 	"log"
 
 	"github.com/kasbuunk/microservice/api/auth"
-	"github.com/kasbuunk/microservice/api/client/eventbus"
 	"github.com/kasbuunk/microservice/api/email"
-	"github.com/kasbuunk/microservice/client/email"
+	"github.com/kasbuunk/microservice/client/email/postmark"
 	"github.com/kasbuunk/microservice/client/eventbus"
-	"github.com/kasbuunk/microservice/client/repository/storage"
-	"github.com/kasbuunk/microservice/client/repository/user"
+	"github.com/kasbuunk/microservice/client/eventbus/eventbus"
+	"github.com/kasbuunk/microservice/client/storage"
+	"github.com/kasbuunk/microservice/client/userrepo/userrepoclient"
 	"github.com/kasbuunk/microservice/config"
 	"github.com/kasbuunk/microservice/event/auth"
 	"github.com/kasbuunk/microservice/event/email"
@@ -28,7 +28,7 @@ func main() {
 	}
 
 	// Initialise clients.
-	userRepo := userrepo.New(db)
+	userRepo := userrepoclient.New(db)
 	emailClient := emailclient.New(conf.Postmark)
 	eventBusClient := eventbusclient.New([]eventbus.Stream{
 		"AUTH",

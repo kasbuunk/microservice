@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/kasbuunk/microservice/api/client/eventbus"
 	"github.com/kasbuunk/microservice/api/email"
+	"github.com/kasbuunk/microservice/client/eventbus"
 	"github.com/kasbuunk/microservice/event"
 )
 

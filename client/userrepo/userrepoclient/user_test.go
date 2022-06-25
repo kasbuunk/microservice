@@ -1,12 +1,12 @@
-package userrepo
+package userrepoclient
 
 import (
+	"github.com/kasbuunk/microservice/client/storage"
+	"github.com/kasbuunk/microservice/client/userrepo"
 	"testing"
 
 	"github.com/kasbuunk/microservice/api/auth/models"
 	"github.com/kasbuunk/microservice/api/auth/user"
-	"github.com/kasbuunk/microservice/api/client/userrepo"
-	"github.com/kasbuunk/microservice/client/repository/storage"
 	"github.com/kasbuunk/microservice/test"
 )
 

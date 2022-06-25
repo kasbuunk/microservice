@@ -1,4 +1,4 @@
-package userrepo
+package userrepoclient
 
 import (
 	"database/sql"

@@ -1,4 +1,4 @@
-package userrepo
+package userrepoclient
 
 import (
 	"database/sql"
@@ -7,7 +7,7 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/kasbuunk/microservice/api/auth/models"
-	"github.com/kasbuunk/microservice/api/client/userrepo"
+	"github.com/kasbuunk/microservice/client/userrepo"
 )
 
 const tableName = "users"

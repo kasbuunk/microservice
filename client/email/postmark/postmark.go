@@ -1,13 +1,13 @@
-// Package emailclient implements the EmailClient interface, so the core domain can remain agnostic of
+// Package emailclient implements the email.Client interface, so the core domain can remain agnostic of
 // the implementation of how emails are actually sent when all domain logic is established.
 package emailclient
 
 import (
 	"fmt"
+	"github.com/kasbuunk/microservice/client/email"
 
 	"github.com/keighl/postmark"
 
-	"github.com/kasbuunk/microservice/api/client/email"
 	"github.com/kasbuunk/microservice/api/email/models"
 )
 
