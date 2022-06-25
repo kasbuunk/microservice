@@ -65,11 +65,11 @@ The input layer is the interface through which other services invoke behaviour i
 
 `server` initialises an HTTP server that listens for requests, invokes domain behaviour and send a response. That behaviour might be limited to merely retrieving data from a repository. If one wishes, multiple servers can be described here that call the same domain logic and uses the same repository interface, but serve a different protocol, like REST, GraphQL, SOAP or gRPC.
 
-#### Event subscriber
+#### Event handler
 
-`eventsubscriber` starts a process that listens for events, invokes behaviour and publish zero or more new events.
+`event.Handler` starts a process that listens for events, invokes behaviour. The behaviour may dictate to perform some side-effects and publish new events.
 
-Publish/subscribe, event-driven architectures can also be implemented by starting a similar process that takes as input the interface of a domain core; in this case an implementation of the auth.Auth interface. The server in that case is a 
+Currently, the event client is implemented to be in-memory, but the aim for it is to be an abstraction of how an eventbus client would interact with the application event store.
 
 ### Client layer
 
