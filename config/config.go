@@ -15,9 +15,9 @@ const envPrefix = "svc"
 
 // Config includes the data fields that the other microservice components need to set up.
 type Config struct {
-	Server   gqlserver.Config
-	DB       storage.Config
-	Postmark emailclient.Config
+	GQLServer gqlserver.Config
+	DB        storage.Config
+	Postmark  emailclient.Config
 }
 
 // New takes its 'input' from environment variables and returns everything  the microservice
