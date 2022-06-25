@@ -6,13 +6,23 @@ _This project is licensed under the MIT License._
 
 The intent of this project is to provide an example microservice that is _scalable in terms of complexity_. In order to achieve that, it applies Domain-Driven Design patterns for separation of concerns. The example exposes a graphql api over http, although the very purpose of this project is to showcase a microservice that is agnostic of the source that invokes its behaviour.
 
+## Principles
+
+- input: there are two sources of input, _requests_ and _events_. Any and all requests are _served_ through a `server.Server` interface. Any and all events are _handled_ by the `event.Handler` interface.
+- processing: the `api` (sub)packages do not import any other package. They determine all domain-specific behaviour, but delegate any side-effects to the implementation of client interfaces it defines under the `api/client` package.
+- output: there are two destinations of output, _responses_ and _effects_. Reponses are the return value of a `server`'s request. _Effects_ (or side-effects) are any state change performed by a `client`, including: newly published events, requests out- or inside the application cluster and database queries through a `repository` interface.
+
 All technical implementation is initialised in the `main` function and injected as dependencies in their `API` interfaces, which allow the domain core to simply call a method that will figure out how to do. Hence, the domain core can focus on what should be done. It's easy to refactor implementation details, easy to test and more expressive.
+
+### WIP
+
+This is still a work-in-progress. The packages' purpose and their interdependencies are a proof of concept. In the future, they may be renamed, merged or segregated and restructured in a suitable hierarchy. 
 
 ## Evolutionary design
 
-Another goal of this project is to showcase how a microservice can be set up to modularise sets of functionality and invoke behaviour in other components through an interface, without the hassle of having maintaining multiple services. One can choose a single service binary with multiple `API`s, located in `api/`. This can be useful in early stages of development, or when the time for breaking up a well-designed modularised monolith never comes.
+A goal of this project is to showcase how a microservice can be set up to modularise sets of functionality and invoke behaviour in other components through an interface, without the hassle of having maintaining multiple services. One can choose a single service binary with multiple `API`s, located in `api/`. This can be useful in early stages of development, or when the time for breaking up a well-designed modularised monolith never comes.
 
-One can freely decide to promote a service's `api` when there are reasons to do so. See how the `email` api could easily be extrapolated as a service on its own. It acts as a broker between services to send messages to each other. This process should be as easy as moving the api to a separate process and replace the behaviour invocation implementation to do a network call or configure the event bus, depending on the communication pattern of the application. The intent is to have a clean architecture, such that the developer may easily promote an api to be its own microservice and just change the implementation of the interface - through which other apis would interact with it - to be a client's network call or event over the application's event store.
+The intent is to have a clean architecture, such that the developer may easily promote an api to be its own microservice and just change the implementation of the interface - through which other apis would interact with it - to be a client's network call or event over the application's event store. See how the `email` api could easily be extrapolated as a standalone microservice. this process should be as easy as moving the api to a separate process and replace the behaviour invocation implementation to do a network call with a server in between, or configure the event bus, depending on the application's communication pattern. 
 
 ## Installation & development
 
@@ -27,15 +37,12 @@ In order to interate on this project, install the following:
 
 Have a postgres instance running and run the `scripts/db.sh` to create database and tables as configured in local.env.
 
-### Asynchronous vs Synchronous
+### Asynchronous vs. synchronous messages
 
 Currently, the implementation of how service modules communicate is done via asynchronous events. Implementing a synchronous request-response type of communication is trivial - analogous to how a database client or any other network call may be implemented.
 
-### WIP
+## Separation of concerns
 
-This is still a work-in-progress. The packages serve their purposes, but may be renamed and restructured in a suitable hierarchy when one is deemed appropriate.
-
-## Domain-driven-design
 The core feature is to showcase a microservice architecture with an inward dependency direction of the following:
 
 ### Domain core (api/*)
