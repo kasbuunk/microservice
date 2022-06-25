@@ -40,12 +40,12 @@ func main() {
 	emailAPI := email.New(busClient, emailClient)
 
 	// Initialise sources of input: servers and listeners.
-	authSubscriber := authsubscriber.New(authAPI, busClient)
-	emailSubscriber := emailsubscriber.New(emailAPI, busClient)
+	authHandler := authhandler.New(authAPI, busClient)
+	emailHandler := emailhandler.New(emailAPI, busClient)
 
 	// Start processes that listen for events.
-	go authSubscriber.SubscribeToEvents()
-	go emailSubscriber.SubscribeToEvents()
+	go authHandler.Handle()
+	go emailHandler.Handle()
 
 	// Initialise Graphql http server.
 	authServer, err := gqlserver.New(conf.GQLServer.Endpoint, authAPI)
