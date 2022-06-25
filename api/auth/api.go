@@ -7,7 +7,8 @@ import (
 
 	"github.com/kasbuunk/microservice/api/auth/models"
 	"github.com/kasbuunk/microservice/api/auth/user"
-	"github.com/kasbuunk/microservice/api/client"
+	"github.com/kasbuunk/microservice/api/client/eventbus"
+	"github.com/kasbuunk/microservice/api/client/userrepo"
 )
 
 // API provides the interface that maps closely to however you wish to communicate with external components.
@@ -30,14 +31,14 @@ type API interface {
 // added here so the domain core remains pure and agnostic of any calls over the network, including other
 // microservices that are part of the same application.
 type Service struct {
-	UserRepo  client.UserRepository
-	BusClient client.EventBusClient
+	UserRepo userrepo.Client
+	EventBus eventbus.Client
 }
 
-func New(repo client.UserRepository, bus client.EventBusClient) API {
+func New(userRepo userrepo.Client, bus eventbus.Client) API {
 	return Service{
-		UserRepo:  repo,
-		BusClient: bus,
+		UserRepo: userRepo,
+		EventBus: bus,
 	}
 }
 
@@ -53,12 +54,12 @@ func (s Service) Register(email models.EmailAddress, password models.Password) (
 	}
 
 	// Invoke behaviour in Email service
-	msg := client.Event{
+	msg := eventbus.Event{
 		Stream:  "AUTH",
 		Subject: "USER_REGISTERED",
-		Body:    client.Body(fmt.Sprintf("new user registered with email %s", usr.Email)),
+		Body:    eventbus.Body(fmt.Sprintf("new user registered with email %s", usr.Email)),
 	}
-	err = s.BusClient.Publish(msg)
+	err = s.EventBus.Publish(msg)
 	if err != nil {
 		return savedUser, fmt.Errorf("publishing msg: %w", err)
 	}

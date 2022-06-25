@@ -5,12 +5,12 @@ import (
 
 	"github.com/kasbuunk/microservice/api/auth/models"
 	"github.com/kasbuunk/microservice/api/auth/user"
-	"github.com/kasbuunk/microservice/api/client"
+	"github.com/kasbuunk/microservice/api/client/userrepo"
 	"github.com/kasbuunk/microservice/client/repository/storage"
 	"github.com/kasbuunk/microservice/test"
 )
 
-func getTestRepo(t *testing.T) client.UserRepository {
+func getTestRepo(t *testing.T) userrepo.Client {
 	conf := storage.Config{
 		Host: test.DBHost,
 		Port: test.DBPort,
@@ -26,13 +26,13 @@ func getTestRepo(t *testing.T) client.UserRepository {
 	return repo
 }
 
-func cleanupRepo(t *testing.T, repo client.UserRepository) {
+func cleanupRepo(t *testing.T, repo userrepo.Client) {
 	users, err := repo.List()
 	if err != nil {
 		t.Errorf("listing users: %v", err)
 	}
-	for _, user := range users {
-		err := repo.Delete(user)
+	for _, usr := range users {
+		err := repo.Delete(usr)
 		if err != nil {
 			t.Errorf("deleting user: %v", err)
 		}
@@ -54,12 +54,12 @@ func TestUserRepository_Save(t *testing.T) {
 	repo := getTestRepo(t)
 	defer cleanupRepo(t, repo)
 
-	user, err := user.NewUser("Hex@amle.com", "jsdklfjsdlk2342A!")
+	usr, err := user.NewUser("Hex@amle.com", "jsdklfjsdlk2342A!")
 	if err != nil {
 		t.Errorf("instantiating new user: %v", err)
 	}
 
-	savedUser, err := repo.Save(user)
+	savedUser, err := repo.Save(usr)
 	if err != nil {
 		t.Errorf("saving user: %v", err)
 	}

@@ -1,4 +1,4 @@
-package client
+package othersvc
 
 // Serves as placeholder for where to put a client interface to interact with another service over the network.
 

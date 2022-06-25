@@ -1,4 +1,4 @@
-package client
+package userrepo
 
 import (
 	"github.com/google/uuid"
@@ -6,8 +6,8 @@ import (
 	"github.com/kasbuunk/microservice/api/auth/models"
 )
 
-// UserRepository is the storage interface through which User entities are retrieved, created and updated from storage.
-type UserRepository interface {
+// Client is the Repository interface through which User entities are retrieved, created and updated from storage.
+type Client interface {
 	// Load 'gets' the instance from the repository by ID. Its implementation is abstracted away.
 	Load(uuid.UUID) (models.User, error)
 	// Save returns a new user instance. This is often achieved by passing in a pointer to a model instance,

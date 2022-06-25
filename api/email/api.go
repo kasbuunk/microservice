@@ -3,7 +3,8 @@ package email
 import (
 	"fmt"
 
-	"github.com/kasbuunk/microservice/api/client"
+	"github.com/kasbuunk/microservice/api/client/email"
+	"github.com/kasbuunk/microservice/api/client/eventbus"
 )
 
 // API provides the interface that maps closely to however you wish to communicate with external components.
@@ -15,25 +16,25 @@ type API interface {
 
 // Service implements the API interface.
 type Service struct {
-	BusClient   client.EventBusClient
-	EmailClient client.EmailClient
+	EventBus    eventbus.Client
+	EmailClient email.Client
 }
 
 func (s Service) Send() error {
-	msg := client.Event{
+	msg := eventbus.Event{
 		Stream:  "EMAIL",
 		Subject: "ACTIVATION_REQUEST_SENT",
-		Body:    client.Body("new user registered with email"),
+		Body:    eventbus.Body("new user registered with email"),
 	}
-	err := s.BusClient.Publish(msg)
+	err := s.EventBus.Publish(msg)
 	if err != nil {
 		return fmt.Errorf("publishing msg: %w", err)
 	}
 	return nil
 }
 
-func New(busCLient client.EventBusClient, emailClient client.EmailClient) API {
+func New(busCLient eventbus.Client, emailClient email.Client) API {
 	return Service{
-		BusClient:   busCLient,
+		EventBus:    busCLient,
 		EmailClient: emailClient}
 }
