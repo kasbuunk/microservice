@@ -8,7 +8,7 @@ The intent of this project is to provide an example microservice that is _scalab
 
 ## Principles
 
-- input: there are two sources of input, _requests_ and _events_. Any and all requests are _served_ through a `server.Server` interface. Any and all events are _handled_ by the `event.Handler` interface.
+- input: there are three sources of input, _requests_, _events_ and _commands_. Any and all requests are _served_ through a `server.Server` interface. Any and all events are _handled_ by the `event.Handler` interface. Commands have yet to be implemented, but follow the same isolation of input source from the invoked behaviour. 
 - processing: the `api` (sub)packages do not import any other package. They determine all domain-specific behaviour, but delegate any side-effects to the implementation of client interfaces it defines under the `api/client` package.
 - output: there are two destinations of output, _responses_ and _effects_. Reponses are the return value of a `server`'s request. _Effects_ (or side-effects) are any state change performed by a `client`, including: newly published events, requests out- or inside the application cluster and database queries through a `repository` interface.
 
@@ -20,9 +20,9 @@ This is still a work-in-progress. The packages' purpose and their interdependenc
 
 ## Evolutionary design
 
-A goal of this project is to showcase how a microservice can be set up to modularise sets of functionality and invoke behaviour in other components through an interface, without the hassle of having maintaining multiple services. One can choose a single service binary with multiple `API`s, located in `api/`. This can be useful in early stages of development, or when the time for breaking up a well-designed modularised monolith never comes.
+A goal of this project is to showcase how a microservice can be set up to modularise sets of functionality and invoke behaviour in other components through an interface, without the hassle of maintaining multiple services. One can choose a single service binary with multiple `API`s, located in `api/`. This can be useful in early stages of development, or when the time for breaking up a well-designed modularised monolith never comes.
 
-The intent is to have a clean architecture, such that the developer may easily promote an api to be its own microservice and just change the implementation of the interface - through which other apis would interact with it - to be a client's network call or event over the application's event store. See how the `email` api could easily be extrapolated as a standalone microservice. this process should be as easy as moving the api to a separate process and replace the behaviour invocation implementation to do a network call with a server in between, or configure the event bus, depending on the application's communication pattern. 
+The intent is to have a clean architecture, such that the developer may easily promote an api to be its own microservice and just change the implementation of the interface - through which other apis would interact with it - to be a client's network call or event over the application's event store. See how the `email` api could easily be extrapolated as a standalone microservice. This process should be as easy as moving the api to a separate process and replace the behaviour invocation implementation to do a network call with a server in between, or configure the event bus, depending on the application's communication pattern. 
 
 ## Installation & development
 
@@ -78,9 +78,13 @@ The input layer is the interface through which other services invoke behaviour i
 
 Currently, the event client is implemented to be in-memory, but the aim for it is to be an abstraction of how an eventbus client would interact with the application event store.
 
+#### Command 
+
+_TODO: Invoking api calls through a command has yet to be implemented._
+
 ### Client layer
 
-`client` contains the implementations of any clients that the APIs need to perform output as side-effects. The interfaces are defined in the domain core, but they're implemented here, such that the domain core remains agnostic of any network dependencies, third-party libraries, storage interfaces, etc.. They are injected as dependencies in the service APIs upon initialisation.
+`client` contains the implementations of any clients that the APIs need to perform output as side-effects. The interfaces are defined in the domain core, but they're implemented here, such that the domain core remains agnostic of any network dependencies, third-party libraries, storage interfaces, etc. They are injected as dependencies in the service APIs upon initialisation.
 
 #### Repository 
 
@@ -88,5 +92,5 @@ Currently, the event client is implemented to be in-memory, but the aim for it i
 
 ##### Storage 
 
-`storage` resides in the repository and currently has a postgres database as its storage interface. The repository layer uses this database interface to implement the interface that the domain core needs to perform business logic.
+`storage` resides in the repository and currently has a postgres database as its storage interface. The repository layer uses this database interface to implement the interface that the domain core depends on to perform business logic.
 
