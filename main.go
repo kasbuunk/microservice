@@ -30,22 +30,18 @@ func main() {
 	// Initialise clients.
 	userRepo := userrepo.New(db)
 	emailClient := emailclient.New(conf.Postmark)
-	eventBusClient := eventbusclient.New([]eventbus.Stream{
+	eventBus := eventbusclient.New([]eventbus.Stream{
 		"AUTH",
 		"EMAIL",
 	})
 
 	// Initialise APIs that implement all core domain logic, injecting dependencies.
-	authAPI := auth.New(userRepo, eventBusClient)
-	emailAPI := email.New(eventBusClient, emailClient)
+	authAPI := auth.New(userRepo, eventBus)
+	emailAPI := email.New(eventBus, emailClient)
 
-	// Initialise sources of input: servers and listeners.
-	authEventHandler := authhandler.New(authAPI, eventBusClient)
-	emailEventHandler := emailhandler.New(emailAPI, eventBusClient)
-
-	// Start processes that listen for events.
-	go authEventHandler.Handle()
-	go emailEventHandler.Handle()
+	// Initialise sources of input: event handlers.
+	go authhandler.New(authAPI, eventBus).Handle()
+	go emailhandler.New(emailAPI, eventBus).Handle()
 
 	// Initialise Graphql http server.
 	authServer, err := gqlserver.New(conf.GQLServer.Endpoint, authAPI)
