@@ -2,11 +2,11 @@ package core
 
 import (
 	"fmt"
-	"github.com/kasbuunk/microservice/app/auth/dependency"
 
 	"github.com/golang-jwt/jwt"
 
 	"github.com/kasbuunk/microservice/app/auth"
+	"github.com/kasbuunk/microservice/app/auth/dependency"
 	"github.com/kasbuunk/microservice/app/auth/models"
 	"github.com/kasbuunk/microservice/app/auth/user"
 	"github.com/kasbuunk/microservice/app/eventbus"
