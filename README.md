@@ -30,7 +30,7 @@ In your deployment pipeline, run `make` to build the service binary `bin/app` an
 
 `cp sample.env local.env` and change accordingly.
 
-In order to interate on this project, install the following:
+In order to iterate on this project, install the following:
 - `go` (>=1.17)
 - `golangci-lint`
 - `gqlgen`
