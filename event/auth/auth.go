@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/kasbuunk/microservice/api/auth"
-	"github.com/kasbuunk/microservice/api/client/eventbus"
+	"github.com/kasbuunk/microservice/app/auth"
+	"github.com/kasbuunk/microservice/app/client/eventbus"
 	"github.com/kasbuunk/microservice/event"
 )
 
 type EventHandler struct {
-	API       auth.API
+	API       auth.App
 	BusClient eventbus.Client
 }
 
@@ -29,7 +29,7 @@ func (s EventHandler) Handle() {
 	}
 }
 
-func New(api auth.API, bus eventbus.Client) event.Handler {
+func New(api auth.App, bus eventbus.Client) event.Handler {
 	return EventHandler{
 		API:       api,
 		BusClient: bus,

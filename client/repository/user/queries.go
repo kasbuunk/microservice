@@ -8,7 +8,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/kasbuunk/microservice/api/auth/models"
+	"github.com/kasbuunk/microservice/app/auth/models"
 )
 
 const insertPrefix = "INSERT INTO"

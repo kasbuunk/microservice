@@ -3,9 +3,9 @@ package main
 import (
 	"log"
 
-	"github.com/kasbuunk/microservice/api/auth"
-	"github.com/kasbuunk/microservice/api/client/eventbus"
-	"github.com/kasbuunk/microservice/api/email"
+	"github.com/kasbuunk/microservice/app/auth"
+	"github.com/kasbuunk/microservice/app/client/eventbus"
+	"github.com/kasbuunk/microservice/app/email"
 	"github.com/kasbuunk/microservice/client/email"
 	"github.com/kasbuunk/microservice/client/eventbus"
 	"github.com/kasbuunk/microservice/client/repository/storage"

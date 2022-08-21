@@ -6,7 +6,7 @@ import (
 
 	"golang.org/x/crypto/bcrypt"
 
-	"github.com/kasbuunk/microservice/api/auth/models"
+	"github.com/kasbuunk/microservice/app/auth/models"
 )
 
 const EmailMaxLength = 64

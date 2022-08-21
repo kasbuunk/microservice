@@ -3,7 +3,7 @@ package userrepo
 import (
 	"github.com/google/uuid"
 
-	"github.com/kasbuunk/microservice/api/auth/models"
+	"github.com/kasbuunk/microservice/app/auth/models"
 )
 
 // Client is the Repository interface through which User entities are retrieved, created and updated from storage.

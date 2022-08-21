@@ -9,4 +9,4 @@ package restserver
 //
 // One other role may be to choose what errors to show and filter, such that the developer can choose full
 // transparency towards services that are internal to the application and only show 'user errors' to the
-// caller if e.g. only one particular api is exposed to external consumers.
+// caller if e.g. only one particular app is exposed to external consumers.

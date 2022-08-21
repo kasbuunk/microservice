@@ -9,7 +9,7 @@
 package eventbusclient
 
 import (
-	"github.com/kasbuunk/microservice/api/client/eventbus"
+	"github.com/kasbuunk/microservice/app/client/eventbus"
 )
 
 // eventBusClient implements the EventBusClient interface through which the caller can Subscribe to and Publish events.

@@ -7,8 +7,8 @@ import (
 
 	"github.com/keighl/postmark"
 
-	"github.com/kasbuunk/microservice/api/client/email"
-	"github.com/kasbuunk/microservice/api/email/models"
+	"github.com/kasbuunk/microservice/app/client/email"
+	"github.com/kasbuunk/microservice/app/email/models"
 )
 
 type Config struct {
