@@ -7,8 +7,8 @@ import (
 
 	"github.com/kasbuunk/microservice/app/auth/models"
 	"github.com/kasbuunk/microservice/app/auth/user"
-	"github.com/kasbuunk/microservice/app/client/eventbus"
-	"github.com/kasbuunk/microservice/app/client/userrepo"
+	"github.com/kasbuunk/microservice/app/dependency/eventbus"
+	"github.com/kasbuunk/microservice/app/dependency/userrepo"
 )
 
 // App provides the interface that maps closely to however you wish to communicate with external components.

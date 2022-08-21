@@ -1,6 +1,6 @@
 // Package eventbusclient implements how events are published, transmitted and subscribed to.
 // Hence, the domain core remains agnostic of how its events are distributed amongst services that
-// subscribe. Here, the implementation of the client can be freely changed to connect to an external
+// subscribe. Here, the implementation of the dependency can be freely changed to connect to an external
 // event store, such as Apache Kafka or NATS JetStream.
 //
 // At this moment, the implementation is in-memory, such that no network call is necessary. This
@@ -9,7 +9,7 @@
 package eventbusclient
 
 import (
-	"github.com/kasbuunk/microservice/app/client/eventbus"
+	"github.com/kasbuunk/microservice/app/dependency/eventbus"
 )
 
 // eventBusClient implements the EventBusClient interface through which the caller can Subscribe to and Publish events.

@@ -3,8 +3,8 @@ package email
 import (
 	"fmt"
 
-	"github.com/kasbuunk/microservice/app/client/email"
-	"github.com/kasbuunk/microservice/app/client/eventbus"
+	"github.com/kasbuunk/microservice/app/dependency/email"
+	"github.com/kasbuunk/microservice/app/dependency/eventbus"
 )
 
 // API provides the interface that maps closely to however you wish to communicate with external components.
