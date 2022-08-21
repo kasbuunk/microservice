@@ -10,7 +10,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 
-	"github.com/kasbuunk/microservice/api/auth"
+	"github.com/kasbuunk/microservice/app/auth"
 	"github.com/kasbuunk/microservice/server"
 	"github.com/kasbuunk/microservice/server/gql/graphql"
 	"github.com/kasbuunk/microservice/server/gql/graphql/generated"

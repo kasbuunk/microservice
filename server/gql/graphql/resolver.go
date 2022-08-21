@@ -1,7 +1,7 @@
 package graph
 
 import (
-	"github.com/kasbuunk/microservice/api/auth"
+	"github.com/kasbuunk/microservice/app/auth"
 )
 
 // This file will not be regenerated automatically.
