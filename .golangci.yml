@@ -1,9 +1,4 @@
 linters-settings:
   gci:
-    sections:
-      - standard # Captures all standard packages if they do not match another section.
-      - newLine
-      - default # Contains all imports that could not be matched to another section type.
-      - newLine # Prints an empty line
-      - prefix(github.com/kasbuunk/microservice) # Groups all imports with the specified Prefix.
+    local-prefixes: github.com/kasbuunk/microservice
 
