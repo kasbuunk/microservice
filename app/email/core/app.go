@@ -1,23 +1,16 @@
-package email
+package core
 
 import (
 	"fmt"
-
-	"github.com/kasbuunk/microservice/app/dependency/email"
+	emailclient "github.com/kasbuunk/microservice/app/dependency/email"
 	"github.com/kasbuunk/microservice/app/dependency/eventbus"
+	"github.com/kasbuunk/microservice/app/email"
 )
-
-// API provides the interface that maps closely to however you wish to communicate with external components.
-// It may be a one-to-one mapping to a graphql schema or grpc service.
-// Other contexts, or 'domains', should communicate with each other through their APIs.
-type API interface {
-	Send() error
-}
 
 // Service implements the API interface.
 type Service struct {
 	EventBus    eventbus.Client
-	EmailClient email.Client
+	EmailClient emailclient.Client
 }
 
 func (s Service) Send() error {
@@ -33,8 +26,8 @@ func (s Service) Send() error {
 	return nil
 }
 
-func New(busCLient eventbus.Client, emailClient email.Client) API {
+func New(busClient eventbus.Client, emailClient emailclient.Client) email.App {
 	return Service{
-		EventBus:    busCLient,
+		EventBus:    busClient,
 		EmailClient: emailClient}
 }
