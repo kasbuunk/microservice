@@ -3,21 +3,21 @@ package userrepo
 import (
 	"database/sql"
 	"fmt"
-	"github.com/kasbuunk/microservice/app/auth/dependency/userrepo"
 
 	"github.com/google/uuid"
 
+	"github.com/kasbuunk/microservice/app/auth/dependency"
 	"github.com/kasbuunk/microservice/app/auth/models"
 )
 
 const tableName = "users"
 
-// UserRepository implements the Repository interface for the User model.
+// UserRepository implements the UserRepository interface for the User model.
 type UserRepository struct {
 	UserDB *sql.DB
 }
 
-func New(db *sql.DB) userrepo.Client {
+func New(db *sql.DB) dependency.UserRepository {
 	return UserRepository{
 		UserDB: db,
 	}
