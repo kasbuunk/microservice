@@ -7,7 +7,7 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/kasbuunk/microservice/app/auth/models"
-	"github.com/kasbuunk/microservice/app/client/userrepo"
+	"github.com/kasbuunk/microservice/app/dependency/userrepo"
 )
 
 const tableName = "users"
