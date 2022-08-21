@@ -12,49 +12,49 @@ import (
 
 const tableName = "users"
 
-// UserRepository implements the UserRepository interface for the User model.
-type UserRepository struct {
-	UserDB *sql.DB
+// Repository implements the UserRepository interface for the User model.
+type Repository struct {
+	DB *sql.DB
 }
 
-func New(db *sql.DB) dependency.UserRepository {
-	return UserRepository{
-		UserDB: db,
+func New(db *sql.DB) dependency.Repository {
+	return Repository{
+		DB: db,
 	}
 }
 
-func (us UserRepository) List() ([]models.User, error) {
-	users, err := selectAll(us.UserDB, tableName)
+func (us Repository) Users() ([]models.User, error) {
+	users, err := selectAll(us.DB, tableName)
 	if err != nil {
 		return []models.User{}, fmt.Errorf("listing users: %w", err)
 	}
 	return users, nil
 }
 
-func (us UserRepository) Delete(usr models.User) error {
-	err := remove(us.UserDB, tableName, usr)
+func (us Repository) UserDelete(usr models.User) error {
+	err := remove(us.DB, tableName, usr)
 	if err != nil {
 		return fmt.Errorf("deleting user: %w", err)
 	}
 	return nil
 }
 
-func (us UserRepository) Save(usr models.User) (models.User, error) {
+func (us Repository) UserSave(usr models.User) (models.User, error) {
 	// If id is set, update, because the entity exists in storage.
 	if !uuidIsEmpty(usr.ID) {
-		err := update(us.UserDB, tableName, usr)
+		err := update(us.DB, tableName, usr)
 		if err != nil {
 			return models.User{}, fmt.Errorf("updating user: %w", err)
 		}
 	} else {
 		// Create (save an id-less user).
-		err := insert(us.UserDB, tableName, usr)
+		err := insert(us.DB, tableName, usr)
 		if err != nil {
 			return models.User{}, fmt.Errorf("inserting user: %w", err)
 		}
 	}
 
-	savedUser, err := selectByUniqueField(us.UserDB, tableName, "email", string(usr.Email))
+	savedUser, err := selectByUniqueField(us.DB, tableName, "email", string(usr.Email))
 	if err != nil {
 		return models.User{}, fmt.Errorf("selecting inserted user: %w", err)
 	}
@@ -65,8 +65,8 @@ func (us UserRepository) Save(usr models.User) (models.User, error) {
 	return savedUser, nil
 }
 
-func (us UserRepository) Load(id uuid.UUID) (models.User, error) {
-	usr, err := selectByID(us.UserDB, tableName, id)
+func (us Repository) User(id uuid.UUID) (models.User, error) {
+	usr, err := selectByID(us.DB, tableName, id)
 	if err != nil {
 		return models.User{}, fmt.Errorf("querying user by id: %w", err)
 	}

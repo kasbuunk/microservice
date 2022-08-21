@@ -19,7 +19,7 @@ var (
 	ExpectedGot = "expected '%v'; got '%v'"
 )
 
-func getTestRepo(t *testing.T) dependency.UserRepository {
+func getTestRepo(t *testing.T) dependency.Repository {
 	conf := storage.Config{
 		Host: DBHost,
 		Port: DBPort,
@@ -35,13 +35,13 @@ func getTestRepo(t *testing.T) dependency.UserRepository {
 	return repo
 }
 
-func cleanupRepo(t *testing.T, repo dependency.UserRepository) {
-	users, err := repo.List()
+func cleanupRepo(t *testing.T, repo dependency.Repository) {
+	users, err := repo.Users()
 	if err != nil {
 		t.Errorf("listing users: %v", err)
 	}
 	for _, usr := range users {
-		err := repo.Delete(usr)
+		err := repo.UserDelete(usr)
 		if err != nil {
 			t.Errorf("deleting user: %v", err)
 		}
@@ -53,7 +53,7 @@ func TestUserRepository_List(t *testing.T) {
 	defer cleanupRepo(t, repo)
 
 	// Check it does not have certain rows.
-	_, err := repo.List()
+	_, err := repo.Users()
 	if err != nil {
 		t.Errorf("listing users: %v", err)
 	}
@@ -68,7 +68,7 @@ func TestUserRepository_Save(t *testing.T) {
 		t.Errorf("instantiating new user: %v", err)
 	}
 
-	savedUser, err := repo.Save(usr)
+	savedUser, err := repo.UserSave(usr)
 	if err != nil {
 		t.Errorf("saving user: %v", err)
 	}
@@ -83,12 +83,12 @@ func TestUserRepository_Delete(t *testing.T) {
 
 	newUser := models.User{Email: "tnei@nrseit.sitm", PasswordHash: "rnsteinrisnter"}
 
-	savedUser, err := repo.Save(newUser)
+	savedUser, err := repo.UserSave(newUser)
 	if err != nil {
 		t.Errorf("saving user: %v", err)
 	}
 
-	err = repo.Delete(savedUser)
+	err = repo.UserDelete(savedUser)
 	if err != nil {
 		t.Errorf("deleting user: %v", err)
 	}
@@ -100,13 +100,13 @@ func TestUserRepository_Update(t *testing.T) {
 
 	newUser := models.User{Email: "trstrs@nrseit.sitm", PasswordHash: "rstrstrs"}
 
-	savedUser, err := repo.Save(newUser)
+	savedUser, err := repo.UserSave(newUser)
 	if err != nil {
 		t.Errorf("saving user: %v", err)
 	}
 	changedEmailField := models.EmailAddress("mynew@email.address")
 	savedUser.Email = changedEmailField
-	changedUser, err := repo.Save(savedUser)
+	changedUser, err := repo.UserSave(savedUser)
 	if err != nil {
 		t.Errorf("updating user: %v", err)
 	}
@@ -120,7 +120,7 @@ func TestUserRepository_Update(t *testing.T) {
 		t.Error("Password changed on save")
 	}
 
-	err = repo.Delete(savedUser)
+	err = repo.UserDelete(savedUser)
 	if err != nil {
 		t.Errorf("deleting user: %v", err)
 	}
@@ -131,7 +131,7 @@ func TestUserRepository(t *testing.T) {
 	defer cleanupRepo(t, repo)
 
 	// Check it does not have certain rows.
-	users, err := repo.List()
+	users, err := repo.Users()
 	if err != nil {
 		t.Errorf("listing users: %v", err)
 	}
@@ -157,7 +157,7 @@ func TestUserRepository(t *testing.T) {
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			// Insert rows.
-			usr, err := repo.Save(tc.user)
+			usr, err := repo.UserSave(tc.user)
 			if err != tc.expectedError {
 				t.Errorf(ExpectedGot, tc.expectedError, err)
 			}
@@ -167,7 +167,7 @@ func TestUserRepository(t *testing.T) {
 			}
 
 			// Check rows exist after insertion.
-			fetchedUser, err := repo.Load(usr.ID)
+			fetchedUser, err := repo.User(usr.ID)
 			if err != nil {
 				t.Errorf("getting user from repo: %v", err)
 			}
@@ -176,12 +176,12 @@ func TestUserRepository(t *testing.T) {
 			}
 
 			// Reset to original state.
-			err = repo.Delete(usr)
+			err = repo.UserDelete(usr)
 			if err != nil {
 				t.Errorf("deleting user: %v", err)
 			}
 			// Verify user does not exist anymore.
-			_, err = repo.Load(usr.ID)
+			_, err = repo.User(usr.ID)
 			if err == nil {
 				t.Error("getting deleted user did not return error")
 			}

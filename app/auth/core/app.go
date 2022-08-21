@@ -17,14 +17,14 @@ import (
 // added here so the domain core remains pure and agnostic of any calls over the network, including other
 // microservices that are part of the same application.
 type application struct {
-	UserRepo dependency.UserRepository
-	EventBus eventbus.Client
+	Repository dependency.Repository
+	EventBus   eventbus.Client
 }
 
-func New(userRepo dependency.UserRepository, bus eventbus.Client) auth.App {
+func New(userRepo dependency.Repository, bus eventbus.Client) auth.App {
 	return application{
-		UserRepo: userRepo,
-		EventBus: bus,
+		Repository: userRepo,
+		EventBus:   bus,
 	}
 }
 
@@ -34,7 +34,7 @@ func (a application) Register(email models.EmailAddress, password models.Passwor
 		return usr, fmt.Errorf("saving user: %w", err)
 	}
 
-	savedUser, err := a.UserRepo.Save(usr)
+	savedUser, err := a.Repository.UserSave(usr)
 	if err != nil {
 		return savedUser, fmt.Errorf("saving user: %w", err)
 	}
