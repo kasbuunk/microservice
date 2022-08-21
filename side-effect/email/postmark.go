@@ -4,10 +4,10 @@ package emailclient
 
 import (
 	"fmt"
+	"github.com/kasbuunk/microservice/app/email/dependency/email"
 
 	"github.com/keighl/postmark"
 
-	"github.com/kasbuunk/microservice/app/dependency/email"
 	"github.com/kasbuunk/microservice/app/email/models"
 )
 
@@ -16,7 +16,7 @@ type Config struct {
 	AccountToken string
 }
 
-// New returns a configured email dependency.
+// New returns a configured email eventbus.
 // TODO: Add static configuration in config and pass through here as input.
 func New(conf Config) email.Client {
 	postmarkClient := postmark.NewClient(conf.ServerToken, conf.AccountToken)

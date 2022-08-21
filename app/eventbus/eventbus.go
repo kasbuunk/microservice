@@ -1,5 +1,5 @@
-// Package eventbus contains all interfaces the APIs need to implement their domain logic. The implementation of these
-// clients are injected as dependencies upon initialisation of APIs.
+// Package eventbus contains all interfaces the Apps need to implement their domain logic. The implementation of these
+// clients are injected as dependencies upon initialisation of Apps.
 package eventbus
 
 // Client offers the caller the interface to Subscribe or Publish to the EventBus, encapsulating its

@@ -3,9 +3,9 @@ package userrepo
 import (
 	"testing"
 
+	"github.com/kasbuunk/microservice/app/auth/dependency/userrepo"
 	"github.com/kasbuunk/microservice/app/auth/models"
 	"github.com/kasbuunk/microservice/app/auth/user"
-	"github.com/kasbuunk/microservice/app/dependency/userrepo"
 	"github.com/kasbuunk/microservice/side-effect/repository/storage"
 )
 

@@ -2,9 +2,10 @@ package core
 
 import (
 	"fmt"
-	emailclient "github.com/kasbuunk/microservice/app/dependency/email"
-	"github.com/kasbuunk/microservice/app/dependency/eventbus"
+
 	"github.com/kasbuunk/microservice/app/email"
+	emailclient "github.com/kasbuunk/microservice/app/email/dependency/email"
+	"github.com/kasbuunk/microservice/app/eventbus"
 )
 
 // Service implements the API interface.

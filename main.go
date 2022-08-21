@@ -3,9 +3,9 @@ package main
 import (
 	"log"
 
-	"github.com/kasbuunk/microservice/app/auth"
-	"github.com/kasbuunk/microservice/app/dependency/eventbus"
-	"github.com/kasbuunk/microservice/app/email"
+	authapp "github.com/kasbuunk/microservice/app/auth/core"
+	emailapp "github.com/kasbuunk/microservice/app/email/core"
+	"github.com/kasbuunk/microservice/app/eventbus"
 	"github.com/kasbuunk/microservice/config"
 	"github.com/kasbuunk/microservice/event/auth"
 	"github.com/kasbuunk/microservice/event/email"
@@ -36,8 +36,8 @@ func main() {
 	})
 
 	// Initialise APIs that implement all core domain logic, injecting dependencies.
-	authAPI := auth.New(userRepo, eventBus)
-	emailAPI := email.New(eventBus, emailClient)
+	authAPI := authapp.New(userRepo, eventBus)
+	emailAPI := emailapp.New(eventBus, emailClient)
 
 	// Initialise sources of input: event handlers.
 	go authhandler.New(authAPI, eventBus).Handle()
