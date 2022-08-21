@@ -2,11 +2,11 @@ package core
 
 import (
 	"fmt"
+	"github.com/kasbuunk/microservice/app/auth/dependency"
 
 	"github.com/golang-jwt/jwt"
 
 	"github.com/kasbuunk/microservice/app/auth"
-	"github.com/kasbuunk/microservice/app/auth/dependency/userrepo"
 	"github.com/kasbuunk/microservice/app/auth/models"
 	"github.com/kasbuunk/microservice/app/auth/user"
 	"github.com/kasbuunk/microservice/app/eventbus"
@@ -17,11 +17,11 @@ import (
 // added here so the domain core remains pure and agnostic of any calls over the network, including other
 // microservices that are part of the same application.
 type application struct {
-	UserRepo userrepo.Client
+	UserRepo dependency.UserRepository
 	EventBus eventbus.Client
 }
 
-func New(userRepo userrepo.Client, bus eventbus.Client) auth.App {
+func New(userRepo dependency.UserRepository, bus eventbus.Client) auth.App {
 	return application{
 		UserRepo: userRepo,
 		EventBus: bus,
