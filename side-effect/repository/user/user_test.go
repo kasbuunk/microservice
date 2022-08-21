@@ -7,16 +7,25 @@ import (
 	"github.com/kasbuunk/microservice/app/auth/user"
 	"github.com/kasbuunk/microservice/app/dependency/userrepo"
 	"github.com/kasbuunk/microservice/side-effect/repository/storage"
-	"github.com/kasbuunk/microservice/test"
+)
+
+var (
+	DBHost = "localhost"
+	DBPort = 5432
+	DBName = "auth_test"
+	DBUser = "postgres"
+	DBPass = "postgres"
+
+	ExpectedGot = "expected '%v'; got '%v'"
 )
 
 func getTestRepo(t *testing.T) userrepo.Client {
 	conf := storage.Config{
-		Host: test.DBHost,
-		Port: test.DBPort,
-		Name: test.DBName,
-		User: test.DBUser,
-		Pass: test.DBPass,
+		Host: DBHost,
+		Port: DBPort,
+		Name: DBName,
+		User: DBUser,
+		Pass: DBPass,
 	}
 	db, err := storage.Connect(conf)
 	if err != nil {
@@ -102,7 +111,7 @@ func TestUserRepository_Update(t *testing.T) {
 		t.Errorf("updating user: %v", err)
 	}
 	if changedUser.Email != changedEmailField {
-		t.Errorf(test.ExpectedGot, changedEmailField, changedUser.Email)
+		t.Errorf(ExpectedGot, changedEmailField, changedUser.Email)
 	}
 	if changedUser.ID != savedUser.ID {
 		t.Error("ID changed on save")
@@ -150,20 +159,20 @@ func TestUserRepository(t *testing.T) {
 			// Insert rows.
 			usr, err := repo.Save(tc.user)
 			if err != tc.expectedError {
-				t.Errorf(test.ExpectedGot, tc.expectedError, err)
+				t.Errorf(ExpectedGot, tc.expectedError, err)
 			}
 			// Check if returned user matches saved.
 			if usr.Email != tc.user.Email {
-				t.Errorf(test.ExpectedGot, tc.user.Email, usr.Email)
+				t.Errorf(ExpectedGot, tc.user.Email, usr.Email)
 			}
 
 			// Check rows exist after insertion.
 			fetchedUser, err := repo.Load(usr.ID)
 			if err != nil {
-				t.Errorf("getting user from repo: %w", err)
+				t.Errorf("getting user from repo: %v", err)
 			}
 			if usr != fetchedUser {
-				t.Errorf(test.ExpectedGot, usr, fetchedUser)
+				t.Errorf(ExpectedGot, usr, fetchedUser)
 			}
 
 			// Reset to original state.

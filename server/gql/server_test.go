@@ -10,12 +10,16 @@ import (
 	"testing"
 
 	"github.com/kasbuunk/microservice/server"
-	"github.com/kasbuunk/microservice/test"
+)
+
+var (
+	SvcPort        = 8089
+	SvcGQLEndpoint = "/gql"
 )
 
 var conf = Config{
-	Port:     server.Port(test.SvcPort),
-	Endpoint: Endpoint(test.SvcGQLEndpoint),
+	Port:     server.Port(SvcPort),
+	Endpoint: Endpoint(SvcGQLEndpoint),
 }
 var serverURL = fmt.Sprintf("http://localhost:%v%v", conf.Port, conf.Endpoint)
 

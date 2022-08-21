@@ -2,17 +2,24 @@ package storage
 
 import (
 	"errors"
-	"github.com/kasbuunk/microservice/test"
 	"testing"
+)
+
+var (
+	DBHost = "localhost"
+	DBPort = 5432
+	DBName = "auth_test"
+	DBUser = "postgres"
+	DBPass = "postgres"
 )
 
 func getTestDB() Config {
 	return Config{
-		Host: test.DBHost,
-		Port: test.DBPort,
-		Name: test.DBName,
-		User: test.DBUser,
-		Pass: test.DBPass,
+		Host: DBHost,
+		Port: DBPort,
+		Name: DBName,
+		User: DBUser,
+		Pass: DBPass,
 	}
 }
 

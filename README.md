@@ -9,10 +9,10 @@ The intent of this project is to provide an example microservice that is _scalab
 ## Principles
 
 - input: there are three sources of input, _requests_, _events_ and _commands_. Any and all requests are _served_ through a `server.Server` interface. Any and all events are _handled_ by the `event.Handler` interface. Commands have yet to be implemented, but follow the same isolation of input source from the invoked behaviour. 
-- processing: the `api` (sub)packages do not import any other package. They determine all domain-specific behaviour, but delegate any side-effects to the implementation of client interfaces it defines under the `api/client` package.
+- processing: the `app` (sub)packages do not import any other package. They determine all domain-specific behaviour, but delegate any side-effects to the implementation of client interfaces it defines under the `app/client` package.
 - output: there are two destinations of output, _responses_ and _effects_. Reponses are the return value of a `server`'s request. _Effects_ (or side-effects) are any state change performed by a `client`, including: newly published events, requests out- or inside the application cluster and database queries through a `repository` interface.
 
-All technical implementation is initialised in the `main` function and injected as dependencies in their `API` interfaces, which allow the domain core to simply call a method that will figure out how to do. Hence, the domain core can focus on what should be done. It's easy to refactor implementation details, easy to test and more expressive.
+All technical implementation is initialised in the `main` function and injected as dependencies in their `App` interfaces, which allow the domain core to simply call a method that will figure out how to do. Hence, the domain core can focus on what should be done. It's easy to refactor implementation details, easy to test and more expressive.
 
 ### WIP
 
@@ -20,9 +20,9 @@ This is still a work-in-progress. The packages' purpose and their interdependenc
 
 ## Evolutionary design
 
-A goal of this project is to showcase how a microservice can be set up to modularise sets of functionality and invoke behaviour in other components through an interface, without the hassle of maintaining multiple services. One can choose a single service binary with multiple `API`s, located in `api/`. This can be useful in early stages of development, or when the time for breaking up a well-designed modularised monolith never comes.
+A goal of this project is to showcase how a microservice can be set up to modularise sets of functionality and invoke behaviour in other components through an interface, without the hassle of maintaining multiple services. One can choose a single service binary with multiple `App`s, located in `app/`. This can be useful in early stages of development, or when the time for breaking up a well-designed modularised monolith never comes.
 
-The intent is to have a clean architecture, such that the developer may easily promote an api to be its own microservice and just change the implementation of the interface - through which other apis would interact with it - to be a client's network call or event over the application's event store. See how the `email` api could easily be extrapolated as a standalone microservice. This process should be as easy as moving the api to a separate process and replace the behaviour invocation implementation to do a network call with a server in between, or configure the event bus, depending on the application's communication pattern. 
+The intent is to have a clean architecture, such that the developer may easily promote an app to be its own microservice and just change the implementation of the interface - through which other apps would interact with it - to be a client's network call or event over the application's event store. See how the `email` app could easily be extrapolated as a standalone microservice. This process should be as easy as moving the app to a separate process and replace the behaviour invocation implementation to do a network call with a server in between, or configure the event bus, depending on the application's communication pattern. 
 
 ## Installation & development
 
@@ -45,17 +45,17 @@ Currently, the implementation of how service modules communicate is done via asy
 
 The core feature is to showcase a microservice architecture with an inward dependency direction of the following:
 
-### Domain core (api/*)
+### Domain core (app/*)
 
-In this example, `api/auth` and `api/email` contain the domain logic. It should use the ubiquitous language of the problem domain, and not include any technical implementation of any client call. 
+In this example, `app/auth` and `app/email` contain the domain logic. It should use the ubiquitous language of the problem domain, and not include any technical implementation of any client call. 
 
-All output (side-effects) other than a direct response back through the input layer proceeds via dependency-injected interfaces. 
+All output (side effects) other than a direct response back through the input layer proceeds via dependency-injected interfaces. 
 
 1. The domain core defines these interfaces. 
-2. The client layer implements them. 
-3. The main function injects the clients as dependencies into the domain core, so it remains agnostic.
+2. The side effect layer implements them. 
+3. The main function injects the side effect implementations of the dependency interfaces into the domain core, so it remains agnostic.
 
-See the email api's `EmailClient` field as an example of how the domain core knows _what_ to do and _when_ to do it, but only the implementation of its interface in the client layer, injected as a dependency by `main`, knows _how_. In this case that is through a postmark client, but this can easily be substituted.
+See the email app's `EmailClient` field as an example of how the domain core knows _what_ to do and _when_ to do it, but only the implementation of its interface in the side effect layer, injected as a dependency by `main`, knows _how_. In this case that is through a postmark client, but this can easily be substituted.
 
 ### Config layer
 `config` has all the configuration that the microservice persists throughout its lifetime. It is strictly immutable. It includes configuration of the microservice's dependencies to be loosely coupled to its deployment environment. Only the `main` package may load the config from the inputs and passes only the relevant parts down.
@@ -80,15 +80,15 @@ Currently, the event client is implemented to be in-memory, but the aim for it i
 
 #### Command 
 
-_TODO: Invoking api calls through a command has yet to be implemented._
+_TODO: Invoking app calls through a command has yet to be implemented._
 
-### Client layer
+### Side effect layer
 
-`client` contains the implementations of any clients that the APIs need to perform output as side-effects. The interfaces are defined in the domain core, but they're implemented here, such that the domain core remains agnostic of any network dependencies, third-party libraries, storage interfaces, etc. They are injected as dependencies in the service APIs upon initialisation.
+`side-effect` contains the implementations of any clients that the Apps need to perform output as side-effects. The interfaces are defined in the domain core, but they're implemented here, such that the domain core remains agnostic of any network dependencies, third-party libraries, storage interfaces, etc. They are injected as dependencies in the service Apps upon initialisation.
 
 #### Repository 
 
-`repository` implements the client to the database of one or more entities or aggregates. The interface defined in the api, similar to other dependencies injected into the api. It translates the retrieval and persistence of entities that need to be committed to storage, and its functionality is called by the domain core package.
+`repository` implements the client to the database of one or more entities or aggregates. The interface defined in the app, similar to other dependencies injected into the app. It translates the retrieval and persistence of entities that need to be committed to storage, and its functionality is called by the domain core package.
 
 ##### Storage 
 
