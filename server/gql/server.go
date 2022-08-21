@@ -26,7 +26,7 @@ type Config struct {
 type Endpoint string
 
 // New takes an endpoint  returns a new server
-func New(endpoint Endpoint, auth auth.API) (server.Server, error) {
+func New(endpoint Endpoint, auth auth.App) (server.Server, error) {
 	srv := handler.NewDefaultServer(
 		generated.NewExecutableSchema(
 			generated.Config{

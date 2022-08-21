@@ -11,10 +11,10 @@ import (
 	"github.com/kasbuunk/microservice/app/client/userrepo"
 )
 
-// API provides the interface that maps closely to however you wish to communicate with external components.
+// App provides the interface that maps closely to however you wish to communicate with external components.
 // It may be a one-to-one mapping to a graphql schema or grpc service.
 // Other contexts, or 'domains', should communicate with each other through their APIs.
-type API interface {
+type App interface {
 	// Register inserts a new account into the repository, that has yet to be activated.
 	Register(models.EmailAddress, models.Password) (models.User, error)
 	Login(models.EmailAddress, models.Password) (jwt.Token, error)
@@ -26,7 +26,7 @@ type API interface {
 	// User(id uuid.UUID) (User, error)
 }
 
-// Service implements the API. It has access to how its entities are stored and retrieved through its
+// Service implements the App. It has access to how its entities are stored and retrieved through its
 // repositories. Additional repositories may be added here to access other entities. Other external clients are also
 // added here so the domain core remains pure and agnostic of any calls over the network, including other
 // microservices that are part of the same application.
@@ -35,7 +35,7 @@ type Service struct {
 	EventBus eventbus.Client
 }
 
-func New(userRepo userrepo.Client, bus eventbus.Client) API {
+func New(userRepo userrepo.Client, bus eventbus.Client) App {
 	return Service{
 		UserRepo: userRepo,
 		EventBus: bus,

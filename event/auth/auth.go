@@ -10,7 +10,7 @@ import (
 )
 
 type EventHandler struct {
-	API       auth.API
+	API       auth.App
 	BusClient eventbus.Client
 }
 
@@ -29,7 +29,7 @@ func (s EventHandler) Handle() {
 	}
 }
 
-func New(api auth.API, bus eventbus.Client) event.Handler {
+func New(api auth.App, bus eventbus.Client) event.Handler {
 	return EventHandler{
 		API:       api,
 		BusClient: bus,
