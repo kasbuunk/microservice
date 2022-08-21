@@ -6,14 +6,14 @@ import (
 	"github.com/kasbuunk/microservice/app/auth"
 	"github.com/kasbuunk/microservice/app/dependency/eventbus"
 	"github.com/kasbuunk/microservice/app/email"
-	"github.com/kasbuunk/microservice/client/email"
-	"github.com/kasbuunk/microservice/client/eventbus"
-	"github.com/kasbuunk/microservice/client/repository/storage"
-	"github.com/kasbuunk/microservice/client/repository/user"
 	"github.com/kasbuunk/microservice/config"
 	"github.com/kasbuunk/microservice/event/auth"
 	"github.com/kasbuunk/microservice/event/email"
 	"github.com/kasbuunk/microservice/server/gql"
+	"github.com/kasbuunk/microservice/side-effect/email"
+	"github.com/kasbuunk/microservice/side-effect/eventbus"
+	"github.com/kasbuunk/microservice/side-effect/repository/storage"
+	"github.com/kasbuunk/microservice/side-effect/repository/user"
 )
 
 func main() {
