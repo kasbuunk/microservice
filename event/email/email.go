@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/kasbuunk/microservice/app/dependency/eventbus"
 	"github.com/kasbuunk/microservice/app/email"
+	"github.com/kasbuunk/microservice/app/eventbus"
 	"github.com/kasbuunk/microservice/event"
 )
 
 type EventHandler struct {
-	API       email.API
+	App       email.App
 	BusClient eventbus.Client
 }
 
@@ -29,9 +29,9 @@ func (s EventHandler) Handle() {
 	}
 }
 
-func New(api email.API, bus eventbus.Client) event.Handler {
+func New(api email.App, bus eventbus.Client) event.Handler {
 	return EventHandler{
-		API:       api,
+		App:       api,
 		BusClient: bus,
 	}
 }

@@ -4,11 +4,12 @@ import (
 	"fmt"
 
 	"github.com/golang-jwt/jwt"
+
 	"github.com/kasbuunk/microservice/app/auth"
+	"github.com/kasbuunk/microservice/app/auth/dependency/userrepo"
 	"github.com/kasbuunk/microservice/app/auth/models"
 	"github.com/kasbuunk/microservice/app/auth/user"
-	"github.com/kasbuunk/microservice/app/dependency/eventbus"
-	"github.com/kasbuunk/microservice/app/dependency/userrepo"
+	"github.com/kasbuunk/microservice/app/eventbus"
 )
 
 // application implements the App. It has access to how its entities are stored and retrieved through its

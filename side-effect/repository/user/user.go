@@ -3,11 +3,11 @@ package userrepo
 import (
 	"database/sql"
 	"fmt"
+	"github.com/kasbuunk/microservice/app/auth/dependency/userrepo"
 
 	"github.com/google/uuid"
 
 	"github.com/kasbuunk/microservice/app/auth/models"
-	"github.com/kasbuunk/microservice/app/dependency/userrepo"
 )
 
 const tableName = "users"

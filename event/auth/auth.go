@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"github.com/kasbuunk/microservice/app/auth"
-	"github.com/kasbuunk/microservice/app/dependency/eventbus"
+	"github.com/kasbuunk/microservice/app/eventbus"
 	"github.com/kasbuunk/microservice/event"
 )
 
