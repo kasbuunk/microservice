@@ -12,15 +12,15 @@ import (
 	"github.com/kasbuunk/microservice/app/eventbus"
 )
 
-// eventBusClient implements the EventBusClient interface through which the caller can Subscribe to and Publish events.
-type eventBusClient struct {
+// EventBus implements the EventBusClient interface through which the caller can Subscribe to and Publish events.
+type EventBus struct {
 	// Holds Subscriptions in memory for now, might be delegated elsewhere
 	// to remain stateless in case of horizontal scaling. Streams do not change at runtime.
 	Streams       []eventbus.Stream
 	Subscriptions []eventbus.Subscription
 }
 
-func (b *eventBusClient) Publish(msg eventbus.Event) error {
+func (b *EventBus) Publish(msg eventbus.Event) error {
 	// For all subscribers that match the msg,
 	for _, subscription := range b.Subscriptions { // b.Subscriptions() when delegated state.
 		if subscribed(subscription, msg) {
@@ -32,7 +32,7 @@ func (b *eventBusClient) Publish(msg eventbus.Event) error {
 	return nil
 }
 
-func (b *eventBusClient) Subscribe(stream eventbus.Stream, subject eventbus.Subject) (chan eventbus.Event, error) {
+func (b *EventBus) Subscribe(stream eventbus.Stream, subject eventbus.Subject) (chan eventbus.Event, error) {
 	eventBus := make(chan eventbus.Event)
 
 	subscription := eventbus.Subscription{
@@ -50,8 +50,8 @@ func (b *eventBusClient) Subscribe(stream eventbus.Stream, subject eventbus.Subj
 // New is initialised with a predetermined set of streams. Its subscriptions
 // should be added after initialisation, upon passing it to the services. The services
 // themselves are responsible for calling the method that adds their subscription.
-func New(streams []eventbus.Stream) eventbus.EventBus {
-	return &eventBusClient{
+func New(streams []eventbus.Stream) *EventBus {
+	return &EventBus{
 		Streams:       streams,
 		Subscriptions: []eventbus.Subscription{},
 	}
