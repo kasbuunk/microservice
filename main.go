@@ -9,7 +9,6 @@ import (
 	authapp "github.com/kasbuunk/microservice/app/auth/core"
 	"github.com/kasbuunk/microservice/app/email/adapter/email"
 	emailapp "github.com/kasbuunk/microservice/app/email/core"
-	"github.com/kasbuunk/microservice/app/eventbus"
 	"github.com/kasbuunk/microservice/config"
 	"github.com/kasbuunk/microservice/event/auth"
 	"github.com/kasbuunk/microservice/event/email"
@@ -27,24 +26,24 @@ func main() {
 		log.Fatalf("Connection to storage failed: %v", err)
 	}
 
-	// Initialise clients.
+	// Initialise adapters.
 	userRepo := userrepo.New(db)
 	emailClient := emailclient.New(conf.Postmark)
-	eventBus := eventbusclient.New([]eventbus.Stream{
+	eventBus := eventbus.New([]string{
 		"AUTH",
 		"EMAIL",
 	})
 
-	// Initialise APIs that implement all core domain logic, injecting dependencies.
-	authAPI := authapp.New(userRepo, eventBus)
-	emailAPI := emailapp.New(eventBus, emailClient)
+	// Initialise Apps that implement all core domain logic, injecting dependencies.
+	authApp := authapp.New(userRepo, eventBus)
+	emailApp := emailapp.New(eventBus, emailClient)
 
 	// Initialise sources of input: event handlers.
-	go authhandler.New(authAPI, eventBus).Handle()
-	go emailhandler.New(emailAPI, eventBus).Handle()
+	go authhandler.New(authApp, eventBus).Handle()
+	go emailhandler.New(emailApp, eventBus).Handle()
 
 	// Initialise Graphql http server.
-	authServer, err := gqlserver.New(conf.GQLServer.Endpoint, authAPI)
+	authServer, err := gql.New(conf.GQLServer.Endpoint, authApp)
 	if err != nil {
 		log.Fatalf("Initialisation of server failed: %v", err)
 	}

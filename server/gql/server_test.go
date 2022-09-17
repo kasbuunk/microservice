@@ -1,4 +1,4 @@
-package gqlserver
+package gql
 
 import (
 	"context"

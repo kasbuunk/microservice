@@ -1,4 +1,4 @@
-// Package eventbusclient implements how events are published, transmitted and subscribed to.
+// Package eventbus implements how events are published, transmitted and subscribed to.
 // Hence, the domain core remains agnostic of how its events are distributed amongst services that
 // subscribe. Here, the implementation of the eventbus can be freely changed to connect to an external
 // event store, such as Apache Kafka or NATS JetStream.
@@ -6,21 +6,21 @@
 // At this moment, the implementation is in-memory, such that no network call is necessary. This
 // suffices for further development in the domain core, while keeping the implementation abstracted
 // away.
-package eventbusclient
+package eventbus
 
 import (
 	"github.com/kasbuunk/microservice/app/eventbus"
 )
 
-// eventBusClient implements the EventBusClient interface through which the caller can Subscribe to and Publish events.
-type eventBusClient struct {
+// EventBus implements the EventBusClient interface through which the caller can Subscribe to and Publish events.
+type EventBus struct {
 	// Holds Subscriptions in memory for now, might be delegated elsewhere
 	// to remain stateless in case of horizontal scaling. Streams do not change at runtime.
 	Streams       []eventbus.Stream
 	Subscriptions []eventbus.Subscription
 }
 
-func (b *eventBusClient) Publish(msg eventbus.Event) error {
+func (b *EventBus) Publish(msg eventbus.Event) error {
 	// For all subscribers that match the msg,
 	for _, subscription := range b.Subscriptions { // b.Subscriptions() when delegated state.
 		if subscribed(subscription, msg) {
@@ -32,8 +32,8 @@ func (b *eventBusClient) Publish(msg eventbus.Event) error {
 	return nil
 }
 
-func (b *eventBusClient) Subscribe(stream eventbus.Stream, subject eventbus.Subject) (eventbus.EventBus, error) {
-	eventBus := make(eventbus.EventBus)
+func (b *EventBus) Subscribe(stream eventbus.Stream, subject eventbus.Subject) (chan eventbus.Event, error) {
+	eventBus := make(chan eventbus.Event)
 
 	subscription := eventbus.Subscription{
 		EventBus: eventBus,
@@ -50,8 +50,12 @@ func (b *eventBusClient) Subscribe(stream eventbus.Stream, subject eventbus.Subj
 // New is initialised with a predetermined set of streams. Its subscriptions
 // should be added after initialisation, upon passing it to the services. The services
 // themselves are responsible for calling the method that adds their subscription.
-func New(streams []eventbus.Stream) eventbus.Client {
-	return &eventBusClient{
+func New(streamNames []string) *EventBus {
+	var streams []eventbus.Stream
+	for _, stream := range streamNames {
+		streams = append(streams, eventbus.Stream(stream))
+	}
+	return &EventBus{
 		Streams:       streams,
 		Subscriptions: []eventbus.Subscription{},
 	}

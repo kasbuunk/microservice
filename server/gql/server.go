@@ -1,6 +1,6 @@
-// Package gqlserver exposes the Server interface that runs and listens for requests.
+// Package gql exposes the Server interface that runs and listens for requests.
 // It accepts configuration on where to run and how to store and retrieve entities.
-package gqlserver
+package gql
 
 import (
 	"fmt"
@@ -16,7 +16,7 @@ import (
 	"github.com/kasbuunk/microservice/server/gql/graphql/generated"
 )
 
-type Service struct{}
+type Server struct{}
 
 type Config struct {
 	Port     server.Port
@@ -37,10 +37,10 @@ func New(endpoint Endpoint, auth auth.App) (server.Server, error) {
 	http.Handle("/", playground.Handler("GraphQL playground", string(endpoint)))
 	http.Handle(string(endpoint), srv)
 
-	return Service{}, nil
+	return Server{}, nil
 }
 
-func (s Service) Serve(port server.Port) error {
+func (s Server) Serve(port server.Port) error {
 	log.Printf("connect to http://localhost:%d/ for GraphQL playground", port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), nil))
 	return nil

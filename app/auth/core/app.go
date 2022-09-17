@@ -17,10 +17,10 @@ import (
 // microservices that are part of the same application.
 type App struct {
 	Repository port.Repository
-	EventBus   eventbus.Client
+	EventBus   eventbus.EventBus
 }
 
-func New(userRepo port.Repository, bus eventbus.Client) App {
+func New(userRepo port.Repository, bus eventbus.EventBus) App {
 	return App{
 		Repository: userRepo,
 		EventBus:   bus,
