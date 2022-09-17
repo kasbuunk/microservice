@@ -6,8 +6,8 @@ import (
 	"github.com/golang-jwt/jwt"
 
 	"github.com/kasbuunk/microservice/app/auth"
-	"github.com/kasbuunk/microservice/app/auth/dependency"
 	"github.com/kasbuunk/microservice/app/auth/models"
+	"github.com/kasbuunk/microservice/app/auth/port"
 	"github.com/kasbuunk/microservice/app/auth/user"
 	"github.com/kasbuunk/microservice/app/eventbus"
 )
@@ -17,11 +17,11 @@ import (
 // added here so the domain core remains pure and agnostic of any calls over the network, including other
 // microservices that are part of the same application.
 type application struct {
-	Repository dependency.Repository
+	Repository port.Repository
 	EventBus   eventbus.Client
 }
 
-func New(userRepo dependency.Repository, bus eventbus.Client) auth.App {
+func New(userRepo port.Repository, bus eventbus.Client) auth.App {
 	return application{
 		Repository: userRepo,
 		EventBus:   bus,

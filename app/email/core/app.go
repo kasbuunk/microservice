@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/kasbuunk/microservice/app/email"
-	emailclient "github.com/kasbuunk/microservice/app/email/dependency/email"
+	emailclient "github.com/kasbuunk/microservice/app/email/port"
 	"github.com/kasbuunk/microservice/app/eventbus"
 )
 

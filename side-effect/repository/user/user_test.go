@@ -3,8 +3,8 @@ package userrepo
 import (
 	"testing"
 
-	"github.com/kasbuunk/microservice/app/auth/dependency"
 	"github.com/kasbuunk/microservice/app/auth/models"
+	"github.com/kasbuunk/microservice/app/auth/port"
 	"github.com/kasbuunk/microservice/app/auth/user"
 	"github.com/kasbuunk/microservice/side-effect/repository/storage"
 )
@@ -19,7 +19,7 @@ var (
 	ExpectedGot = "expected '%v'; got '%v'"
 )
 
-func getTestRepo(t *testing.T) dependency.Repository {
+func getTestRepo(t *testing.T) port.Repository {
 	conf := storage.Config{
 		Host: DBHost,
 		Port: DBPort,
@@ -35,7 +35,7 @@ func getTestRepo(t *testing.T) dependency.Repository {
 	return repo
 }
 
-func cleanupRepo(t *testing.T, repo dependency.Repository) {
+func cleanupRepo(t *testing.T, repo port.Repository) {
 	users, err := repo.Users()
 	if err != nil {
 		t.Errorf("listing users: %v", err)
