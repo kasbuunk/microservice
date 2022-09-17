@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	"github.com/kasbuunk/microservice/adapter/eventbus"
 	"github.com/kasbuunk/microservice/app/auth/adapter/repository/storage"
 	"github.com/kasbuunk/microservice/app/auth/adapter/repository/user"
 	authapp "github.com/kasbuunk/microservice/app/auth/core"
@@ -13,7 +14,6 @@ import (
 	"github.com/kasbuunk/microservice/event/auth"
 	"github.com/kasbuunk/microservice/event/email"
 	"github.com/kasbuunk/microservice/server/gql"
-	"github.com/kasbuunk/microservice/side-effect/eventbus"
 )
 
 func main() {
