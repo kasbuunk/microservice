@@ -1,4 +1,4 @@
-// Package eventbusclient implements how events are published, transmitted and subscribed to.
+// Package eventbus implements how events are published, transmitted and subscribed to.
 // Hence, the domain core remains agnostic of how its events are distributed amongst services that
 // subscribe. Here, the implementation of the eventbus can be freely changed to connect to an external
 // event store, such as Apache Kafka or NATS JetStream.
@@ -6,7 +6,7 @@
 // At this moment, the implementation is in-memory, such that no network call is necessary. This
 // suffices for further development in the domain core, while keeping the implementation abstracted
 // away.
-package eventbusclient
+package eventbus
 
 import (
 	"github.com/kasbuunk/microservice/app/eventbus"
@@ -50,7 +50,11 @@ func (b *EventBus) Subscribe(stream eventbus.Stream, subject eventbus.Subject) (
 // New is initialised with a predetermined set of streams. Its subscriptions
 // should be added after initialisation, upon passing it to the services. The services
 // themselves are responsible for calling the method that adds their subscription.
-func New(streams []eventbus.Stream) *EventBus {
+func New(streamNames []string) *EventBus {
+	var streams []eventbus.Stream
+	for _, stream := range streamNames {
+		streams = append(streams, eventbus.Stream(stream))
+	}
 	return &EventBus{
 		Streams:       streams,
 		Subscriptions: []eventbus.Subscription{},

@@ -9,7 +9,6 @@ import (
 	authapp "github.com/kasbuunk/microservice/app/auth/core"
 	"github.com/kasbuunk/microservice/app/email/adapter/email"
 	emailapp "github.com/kasbuunk/microservice/app/email/core"
-	"github.com/kasbuunk/microservice/app/eventbus"
 	"github.com/kasbuunk/microservice/config"
 	"github.com/kasbuunk/microservice/event/auth"
 	"github.com/kasbuunk/microservice/event/email"
@@ -27,10 +26,10 @@ func main() {
 		log.Fatalf("Connection to storage failed: %v", err)
 	}
 
-	// Initialise clients.
+	// Initialise adapters.
 	userRepo := userrepo.New(db)
 	emailClient := emailclient.New(conf.Postmark)
-	eventBus := eventbusclient.New([]eventbus.Stream{
+	eventBus := eventbus.New([]string{
 		"AUTH",
 		"EMAIL",
 	})
