@@ -4,7 +4,7 @@ _This project is licensed under the MIT License._
 
 ## What & why
 
-The intent of this project is to provide an example microservice that is _scalable in terms of complexity_. In order to achieve that, it applies Domain-Driven Design patterns for separation of concerns. The example exposes a graphql api over http, although the very purpose of this project is to showcase a microservice that is agnostic of the source that invokes its behaviour.
+The intent of this project is to provide an example microservice that is _scalable in terms of complexity_. In order to achieve that, it applies Domain-Driven Design patterns for separation of concerns. Ports and adapters further help to isolate the domain core. The example exposes a graphql api over http, although the very purpose of this project is to showcase a microservice that is agnostic of the source that invokes its behaviour.
 
 ## Principles
 
@@ -35,7 +35,7 @@ In order to iterate on this project, install the following:
 - `golangci-lint`
 - `gqlgen`
 
-Have a postgres instance running and run the `scripts/db.sh` to create database and tables as configured in local.env.
+Have a postgres instance running and run the `scripts/db.sh` to create database and tables as configured in `local.env`.
 
 ### Asynchronous vs. synchronous messages
 
@@ -49,18 +49,18 @@ The core feature is to showcase a microservice architecture with an inward depen
 
 In this example, `app/auth` and `app/email` contain the domain logic. It should use the ubiquitous language of the problem domain, and not include any technical implementation of any client call. 
 
-All output (side effects) other than a direct response back through the input layer proceeds via dependency-injected interfaces. 
+All output (side effects) other than a direct response back through the input layer proceeds via dependency-injected adapters. 
 
-1. The domain core defines these interfaces. 
-2. The side effect layer implements them. 
-3. The main function injects the side effect implementations of the dependency interfaces into the domain core, so it remains agnostic.
+1. The domain core defines its `ports` as interfaces. 
+2. The `adapters` implement them. 
+3. The main function initialises the `adapters` and injects them as implementations of the `ports` into the domain core. Thus the domain core remains agnostic.
 
 See the email app's `EmailClient` field as an example of how the domain core knows _what_ to do and _when_ to do it, but only the implementation of its interface in the side effect layer, injected as a dependency by `main`, knows _how_. In this case that is through a postmark client, but this can easily be substituted.
 
 ### Config layer
-`config` has all the configuration that the microservice persists throughout its lifetime. It is strictly immutable. It includes configuration of the microservice's dependencies to be loosely coupled to its deployment environment. Only the `main` package may load the config from the inputs and passes only the relevant parts down.
+`config` has all the configuration that the microservice persists throughout its lifetime. It is strictly immutable. It includes configuration of the microservice's `ports`, i.e. its dependency interfaces, to be loosely coupled to its deployment environment. Only the `main` package may load the config from the inputs and passes only the relevant parts down.
 
-- Environment variables: the obvious choice to configure a port, graphql endpoint, database configurations, etc.
+- Environment variables: the obvious choice to configure the port the process listeb on, graphql endpoint, database configurations, etc.
 - Command-line flags: if the microservice accepts command-line flags, they should be loaded in this package, included in the Config variable and returned to the main package.
 - Filesystem data: files that are accessible at runtime can be loaded into the service's memory in this package. Mind that it is meant for immutable data. If your files are mutable and service-scoped (probably you don't want this), it should provide a different package to interact with. If it is shared across replicas of this microservice, it's seen as a storage implementation and hence be included therein.
 
@@ -82,9 +82,9 @@ Currently, the event client is implemented to be in-memory, but the aim for it i
 
 _TODO: Invoking app calls through a command has yet to be implemented._
 
-### Side effect layer
+### Adapter layer
 
-`side-effect` contains the implementations of any clients that the Apps need to perform output as side-effects. The interfaces are defined in the domain core, but they're implemented here, such that the domain core remains agnostic of any network dependencies, third-party libraries, storage interfaces, etc. They are injected as dependencies in the service Apps upon initialisation.
+`adapter` contains the implementations of any `port` dependencies the Apps need to perform output as side-effects. The interfaces are defined in the domain core as `ports`, but they're implemented here, such that the domain core remains agnostic of any network dependencies, third-party libraries, storage interfaces, etc. They are injected as dependencies in the service `Apps` upon initialisation.
 
 #### Repository 
 
