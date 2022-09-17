@@ -5,30 +5,29 @@ import (
 
 	"github.com/golang-jwt/jwt"
 
-	"github.com/kasbuunk/microservice/app/auth"
 	"github.com/kasbuunk/microservice/app/auth/models"
 	"github.com/kasbuunk/microservice/app/auth/port"
 	"github.com/kasbuunk/microservice/app/auth/user"
 	"github.com/kasbuunk/microservice/app/eventbus"
 )
 
-// application implements the App. It has access to how its entities are stored and retrieved through its
+// App implements the App. It has access to how its entities are stored and retrieved through its
 // repositories. Additional repositories may be added here to access other entities. Other external clients are also
 // added here so the domain core remains pure and agnostic of any calls over the network, including other
 // microservices that are part of the same application.
-type application struct {
+type App struct {
 	Repository port.Repository
 	EventBus   eventbus.Client
 }
 
-func New(userRepo port.Repository, bus eventbus.Client) auth.App {
-	return application{
+func New(userRepo port.Repository, bus eventbus.Client) App {
+	return App{
 		Repository: userRepo,
 		EventBus:   bus,
 	}
 }
 
-func (a application) Register(email models.EmailAddress, password models.Password) (models.User, error) {
+func (a App) Register(email models.EmailAddress, password models.Password) (models.User, error) {
 	usr, err := user.NewUser(email, password)
 	if err != nil {
 		return usr, fmt.Errorf("saving user: %w", err)
@@ -52,7 +51,7 @@ func (a application) Register(email models.EmailAddress, password models.Passwor
 	return savedUser, nil
 }
 
-func (a application) Login(email models.EmailAddress, password models.Password) (jwt.Token, error) {
+func (a App) Login(email models.EmailAddress, password models.Password) (jwt.Token, error) {
 	// TODO: Add method to repo to retrieve user by email, or add filter to List users and use the first row.
 	// user := s.Users
 	_, err := user.HashPassword(password)

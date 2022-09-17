@@ -8,13 +8,13 @@ import (
 	"github.com/kasbuunk/microservice/app/eventbus"
 )
 
-// Service implements the API interface.
-type Service struct {
+// App implements the API interface.
+type App struct {
 	EventBus    eventbus.Client
 	EmailClient emailclient.Client
 }
 
-func (s Service) Send() error {
+func (s App) Send() error {
 	msg := eventbus.Event{
 		Stream:  "EMAIL",
 		Subject: "ACTIVATION_REQUEST_SENT",
@@ -28,7 +28,7 @@ func (s Service) Send() error {
 }
 
 func New(busClient eventbus.Client, emailClient emailclient.Client) email.App {
-	return Service{
+	return App{
 		EventBus:    busClient,
 		EmailClient: emailClient}
 }

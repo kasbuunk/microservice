@@ -7,7 +7,6 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/kasbuunk/microservice/app/auth/models"
-	"github.com/kasbuunk/microservice/app/auth/port"
 )
 
 const tableName = "users"
@@ -17,7 +16,7 @@ type Repository struct {
 	DB *sql.DB
 }
 
-func New(db *sql.DB) port.Repository {
+func New(db *sql.DB) Repository {
 	return Repository{
 		DB: db,
 	}
