@@ -35,16 +35,16 @@ func main() {
 		"EMAIL",
 	})
 
-	// Initialise APIs that implement all core domain logic, injecting dependencies.
-	authAPI := authapp.New(userRepo, eventBus)
-	emailAPI := emailapp.New(eventBus, emailClient)
+	// Initialise Apps that implement all core domain logic, injecting dependencies.
+	authApp := authapp.New(userRepo, eventBus)
+	emailApp := emailapp.New(eventBus, emailClient)
 
 	// Initialise sources of input: event handlers.
-	go authhandler.New(authAPI, eventBus).Handle()
-	go emailhandler.New(emailAPI, eventBus).Handle()
+	go authhandler.New(authApp, eventBus).Handle()
+	go emailhandler.New(emailApp, eventBus).Handle()
 
 	// Initialise Graphql http server.
-	authServer, err := gqlserver.New(conf.GQLServer.Endpoint, authAPI)
+	authServer, err := gqlserver.New(conf.GQLServer.Endpoint, authApp)
 	if err != nil {
 		log.Fatalf("Initialisation of server failed: %v", err)
 	}
