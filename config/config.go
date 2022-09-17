@@ -6,8 +6,8 @@ package config
 import (
 	"github.com/kelseyhightower/envconfig"
 
-	"github.com/kasbuunk/microservice/app/auth/adapter/repository/storage"
-	"github.com/kasbuunk/microservice/app/email/adapter/email"
+	"github.com/kasbuunk/microservice/app/adapter/email"
+	"github.com/kasbuunk/microservice/app/adapter/repository/storage"
 	"github.com/kasbuunk/microservice/server/gql"
 )
 

@@ -4,21 +4,20 @@ import (
 	"fmt"
 
 	"github.com/kasbuunk/microservice/app/email"
-	emailclient "github.com/kasbuunk/microservice/app/email/port"
-	"github.com/kasbuunk/microservice/app/eventbus"
+	"github.com/kasbuunk/microservice/app/port"
 )
 
 // App implements the API interface.
 type App struct {
-	EventBus    eventbus.EventBus
-	EmailClient emailclient.Client
+	EventBus    port.EventBus
+	EmailClient port.Client
 }
 
 func (s App) Send() error {
-	msg := eventbus.Event{
+	msg := port.Event{
 		Stream:  "EMAIL",
 		Subject: "ACTIVATION_REQUEST_SENT",
-		Body:    eventbus.Body("new user registered with email"),
+		Body:    port.Body("new user registered with email"),
 	}
 	err := s.EventBus.Publish(msg)
 	if err != nil {
@@ -27,7 +26,7 @@ func (s App) Send() error {
 	return nil
 }
 
-func New(busClient eventbus.EventBus, emailClient emailclient.Client) email.App {
+func New(busClient port.EventBus, emailClient port.Client) email.App {
 	return App{
 		EventBus:    busClient,
 		EmailClient: emailClient}

@@ -6,9 +6,8 @@ import (
 	"github.com/golang-jwt/jwt"
 
 	"github.com/kasbuunk/microservice/app/auth/models"
-	"github.com/kasbuunk/microservice/app/auth/port"
 	"github.com/kasbuunk/microservice/app/auth/user"
-	"github.com/kasbuunk/microservice/app/eventbus"
+	"github.com/kasbuunk/microservice/app/port"
 )
 
 // App implements the App. It has access to how its entities are stored and retrieved through its
@@ -17,10 +16,10 @@ import (
 // microservices that are part of the same application.
 type App struct {
 	Repository port.Repository
-	EventBus   eventbus.EventBus
+	EventBus   port.EventBus
 }
 
-func New(userRepo port.Repository, bus eventbus.EventBus) App {
+func New(userRepo port.Repository, bus port.EventBus) App {
 	return App{
 		Repository: userRepo,
 		EventBus:   bus,
@@ -39,10 +38,10 @@ func (a App) Register(email models.EmailAddress, password models.Password) (mode
 	}
 
 	// Invoke behaviour in Email service
-	msg := eventbus.Event{
+	msg := port.Event{
 		Stream:  "AUTH",
 		Subject: "USER_REGISTERED",
-		Body:    eventbus.Body(fmt.Sprintf("new user registered with email %s", usr.Email)),
+		Body:    port.Body(fmt.Sprintf("new user registered with email %s", usr.Email)),
 	}
 	err = a.EventBus.Publish(msg)
 	if err != nil {
