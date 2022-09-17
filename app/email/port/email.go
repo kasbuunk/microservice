@@ -1,4 +1,4 @@
-package email
+package port
 
 import "github.com/kasbuunk/microservice/app/email/models"
 

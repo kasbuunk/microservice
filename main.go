@@ -3,17 +3,17 @@ package main
 import (
 	"log"
 
+	"github.com/kasbuunk/microservice/adapter/eventbus"
+	"github.com/kasbuunk/microservice/app/auth/adapter/repository/storage"
+	"github.com/kasbuunk/microservice/app/auth/adapter/repository/user"
 	authapp "github.com/kasbuunk/microservice/app/auth/core"
+	"github.com/kasbuunk/microservice/app/email/adapter/email"
 	emailapp "github.com/kasbuunk/microservice/app/email/core"
 	"github.com/kasbuunk/microservice/app/eventbus"
 	"github.com/kasbuunk/microservice/config"
 	"github.com/kasbuunk/microservice/event/auth"
 	"github.com/kasbuunk/microservice/event/email"
 	"github.com/kasbuunk/microservice/server/gql"
-	"github.com/kasbuunk/microservice/side-effect/email"
-	"github.com/kasbuunk/microservice/side-effect/eventbus"
-	"github.com/kasbuunk/microservice/side-effect/repository/storage"
-	"github.com/kasbuunk/microservice/side-effect/repository/user"
 )
 
 func main() {
