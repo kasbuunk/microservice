@@ -43,7 +43,7 @@ func main() {
 	go emailhandler.New(emailApp, eventBus).Handle()
 
 	// Initialise Graphql http server.
-	authServer, err := gqlserver.New(conf.GQLServer.Endpoint, authApp)
+	authServer, err := gql.New(conf.GQLServer.Endpoint, authApp)
 	if err != nil {
 		log.Fatalf("Initialisation of server failed: %v", err)
 	}
