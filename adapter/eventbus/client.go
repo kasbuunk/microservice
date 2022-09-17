@@ -32,8 +32,8 @@ func (b *eventBusClient) Publish(msg eventbus.Event) error {
 	return nil
 }
 
-func (b *eventBusClient) Subscribe(stream eventbus.Stream, subject eventbus.Subject) (eventbus.EventBus, error) {
-	eventBus := make(eventbus.EventBus)
+func (b *eventBusClient) Subscribe(stream eventbus.Stream, subject eventbus.Subject) (chan eventbus.Event, error) {
+	eventBus := make(chan eventbus.Event)
 
 	subscription := eventbus.Subscription{
 		EventBus: eventBus,
@@ -50,7 +50,7 @@ func (b *eventBusClient) Subscribe(stream eventbus.Stream, subject eventbus.Subj
 // New is initialised with a predetermined set of streams. Its subscriptions
 // should be added after initialisation, upon passing it to the services. The services
 // themselves are responsible for calling the method that adds their subscription.
-func New(streams []eventbus.Stream) eventbus.Client {
+func New(streams []eventbus.Stream) eventbus.EventBus {
 	return &eventBusClient{
 		Streams:       streams,
 		Subscriptions: []eventbus.Subscription{},

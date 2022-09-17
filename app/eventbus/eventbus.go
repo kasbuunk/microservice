@@ -2,14 +2,12 @@
 // clients are injected as dependencies upon initialisation of Apps.
 package eventbus
 
-// Client offers the caller the interface to Subscribe or Publish to the EventBus, encapsulating its
+// EventBus offers the caller the interface to Subscribe or Publish to the EventBus, encapsulating its
 // technical implementation.
-type Client interface {
-	Subscribe(Stream, Subject) (EventBus, error)
+type EventBus interface {
+	Subscribe(Stream, Subject) (chan Event, error)
 	Publish(Event) error
 }
-
-type EventBus chan Event
 
 type Subject string
 type Stream string
@@ -22,7 +20,7 @@ type Event struct {
 }
 
 type Subscription struct {
-	EventBus EventBus
+	EventBus chan Event
 	Stream   Stream
 	Subject  Subject
 }

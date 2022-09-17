@@ -11,7 +11,7 @@ import (
 
 type EventHandler struct {
 	API       auth.App
-	BusClient eventbus.Client
+	BusClient eventbus.EventBus
 }
 
 // Handle listens for events that match the Stream or Subject and invokes the appropriate domain behaviour.
@@ -29,7 +29,7 @@ func (s EventHandler) Handle() {
 	}
 }
 
-func New(api auth.App, bus eventbus.Client) event.Handler {
+func New(api auth.App, bus eventbus.EventBus) event.Handler {
 	return EventHandler{
 		API:       api,
 		BusClient: bus,
