@@ -3,10 +3,10 @@ package userrepo
 import (
 	"testing"
 
+	"github.com/kasbuunk/microservice/app/auth/adapter/repository/storage"
 	"github.com/kasbuunk/microservice/app/auth/models"
 	"github.com/kasbuunk/microservice/app/auth/port"
 	"github.com/kasbuunk/microservice/app/auth/user"
-	"github.com/kasbuunk/microservice/side-effect/repository/storage"
 )
 
 var (
