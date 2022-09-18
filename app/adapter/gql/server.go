@@ -10,9 +10,9 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 
+	"github.com/kasbuunk/microservice/app/adapter/gql/graphql"
+	"github.com/kasbuunk/microservice/app/adapter/gql/graphql/generated"
 	"github.com/kasbuunk/microservice/app/auth"
-	"github.com/kasbuunk/microservice/server/gql/graphql"
-	"github.com/kasbuunk/microservice/server/gql/graphql/generated"
 )
 
 type Server struct{}

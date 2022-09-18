@@ -1,5 +1,5 @@
-// Package port contains all interfaces the Apps need to implement their domain logic. The implementation of these
-// clients are injected as dependencies upon initialisation of Apps.
+// Package port contains all interfaces the Apps need to implement their domain logic. The adapters
+// implement the ports and are injected as dependencies upon initialisation of Apps.
 package port
 
 // EventBus offers the caller the interface to Subscribe or Publish to the EventBus, encapsulating its
