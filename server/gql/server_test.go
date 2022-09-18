@@ -41,7 +41,7 @@ func setupServer(t *testing.T) {
 func TestGraphqlRequests(t *testing.T) {
 	setupServer(t)
 
-	cases := []struct{ name, input, expected string }{
+	testCases := []struct{ name, requestBody, expectedResponseBody string }{
 		{
 			"EmptyRequest",
 			"{}",
@@ -54,10 +54,10 @@ func TestGraphqlRequests(t *testing.T) {
 		},
 	}
 
-	for _, tc := range cases {
-		t.Run(tc.name, func(t *testing.T) {
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
 			// Send GET request to the endpoint.
-			req, err := http.NewRequestWithContext(context.Background(), http.MethodPost, serverURL, strings.NewReader(tc.input))
+			req, err := http.NewRequestWithContext(context.Background(), http.MethodPost, serverURL, strings.NewReader(testCase.requestBody))
 			if err != nil {
 				t.Error(err)
 			}
@@ -81,8 +81,8 @@ func TestGraphqlRequests(t *testing.T) {
 			}
 
 			actual := string(body)
-			if actual != tc.expected {
-				t.Fatalf("expected: '%v'; actual: '%v'", tc.expected, actual)
+			if actual != testCase.expectedResponseBody {
+				t.Fatalf("expected: '%v'; actual: '%v'", testCase.expectedResponseBody, actual)
 			}
 		})
 	}
