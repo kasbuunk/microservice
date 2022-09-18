@@ -7,11 +7,11 @@ import (
 	"github.com/kasbuunk/microservice/adapter/eventbus"
 	"github.com/kasbuunk/microservice/adapter/eventhandler"
 	"github.com/kasbuunk/microservice/adapter/gql"
-	"github.com/kasbuunk/microservice/adapter/repository/storage"
 	"github.com/kasbuunk/microservice/adapter/repository/user"
 	authapp "github.com/kasbuunk/microservice/auth/core"
 	"github.com/kasbuunk/microservice/config"
 	emailapp "github.com/kasbuunk/microservice/email/core"
+	"github.com/kasbuunk/microservice/internal/storage"
 )
 
 func main() {

@@ -8,7 +8,7 @@ import (
 
 	"github.com/kasbuunk/microservice/adapter/email"
 	"github.com/kasbuunk/microservice/adapter/gql"
-	"github.com/kasbuunk/microservice/adapter/repository/storage"
+	"github.com/kasbuunk/microservice/internal/storage"
 )
 
 const envPrefix = "svc"
