@@ -11,7 +11,6 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 
 	"github.com/kasbuunk/microservice/app/auth"
-	"github.com/kasbuunk/microservice/server"
 	"github.com/kasbuunk/microservice/server/gql/graphql"
 	"github.com/kasbuunk/microservice/server/gql/graphql/generated"
 )
@@ -24,7 +23,7 @@ type Config struct {
 }
 
 // New takes an endpoint  returns a new server
-func New(endpoint string, auth auth.App) (server.Server, error) {
+func New(endpoint string, auth auth.App) (Server, error) {
 	srv := handler.NewDefaultServer(
 		generated.NewExecutableSchema(
 			generated.Config{
