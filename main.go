@@ -5,14 +5,13 @@ import (
 
 	"github.com/kasbuunk/microservice/app/adapter/email"
 	"github.com/kasbuunk/microservice/app/adapter/eventbus"
+	"github.com/kasbuunk/microservice/app/adapter/eventhandler"
+	"github.com/kasbuunk/microservice/app/adapter/gql"
 	"github.com/kasbuunk/microservice/app/adapter/repository/storage"
 	"github.com/kasbuunk/microservice/app/adapter/repository/user"
 	authapp "github.com/kasbuunk/microservice/app/auth/core"
 	emailapp "github.com/kasbuunk/microservice/app/email/core"
 	"github.com/kasbuunk/microservice/config"
-	"github.com/kasbuunk/microservice/event/auth"
-	"github.com/kasbuunk/microservice/event/email"
-	"github.com/kasbuunk/microservice/server/gql"
 )
 
 func main() {
@@ -39,8 +38,8 @@ func main() {
 	emailApp := emailapp.New(eventBus, emailClient)
 
 	// Initialise sources of input: event handlers.
-	go authhandler.New(authApp, eventBus).Handle()
-	go emailhandler.New(emailApp, eventBus).Handle()
+	go eventhandler.NewAuthEventHandler(authApp, eventBus).Handle()
+	go eventhandler.NewEmailEventHandler(emailApp, eventBus).Handle()
 
 	// Initialise Graphql http server.
 	authServer, err := gql.New(conf.GQLServer.Endpoint, authApp)

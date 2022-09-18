@@ -1,24 +1,24 @@
-package emailhandler
+package eventhandler
 
 import (
 	"fmt"
 	"log"
 
-	"github.com/kasbuunk/microservice/app/email"
+	"github.com/kasbuunk/microservice/app/auth"
 	"github.com/kasbuunk/microservice/app/port"
 )
 
-type EventHandler struct {
-	App       email.App
+type AuthEventHandler struct {
+	API       auth.App
 	BusClient port.EventBus
 }
 
 // Handle listens for events that match the Stream or Subject and invokes the appropriate domain behaviour.
-func (s EventHandler) Handle() {
-	fmt.Println("Email service listening for events.")
+func (s AuthEventHandler) Handle() {
+	fmt.Println("Auth service listening for events.")
 	for {
 		// Starts process in loop, awaiting published messages.
-		eventBus, err := s.BusClient.Subscribe("AUTH", "USER_REGISTERED")
+		eventBus, err := s.BusClient.Subscribe("AUTH", "ACTIVATION_REQUEST_SENT")
 		if err != nil {
 			log.Fatal(fmt.Errorf("subscribing: %w", err))
 		}
@@ -28,9 +28,9 @@ func (s EventHandler) Handle() {
 	}
 }
 
-func New(api email.App, bus port.EventBus) EventHandler {
-	return EventHandler{
-		App:       api,
+func NewAuthEventHandler(api auth.App, bus port.EventBus) AuthEventHandler {
+	return AuthEventHandler{
+		API:       api,
 		BusClient: bus,
 	}
 }

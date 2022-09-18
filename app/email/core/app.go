@@ -10,7 +10,7 @@ import (
 // App implements the API interface.
 type App struct {
 	EventBus    port.EventBus
-	EmailClient port.Client
+	EmailClient port.EmailClient
 }
 
 func (s App) Send() error {
@@ -26,7 +26,7 @@ func (s App) Send() error {
 	return nil
 }
 
-func New(busClient port.EventBus, emailClient port.Client) email.App {
+func New(busClient port.EventBus, emailClient port.EmailClient) email.App {
 	return App{
 		EventBus:    busClient,
 		EmailClient: emailClient}

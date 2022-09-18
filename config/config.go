@@ -7,8 +7,8 @@ import (
 	"github.com/kelseyhightower/envconfig"
 
 	"github.com/kasbuunk/microservice/app/adapter/email"
+	"github.com/kasbuunk/microservice/app/adapter/gql"
 	"github.com/kasbuunk/microservice/app/adapter/repository/storage"
-	"github.com/kasbuunk/microservice/server/gql"
 )
 
 const envPrefix = "svc"

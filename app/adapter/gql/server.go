@@ -10,9 +10,9 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 
+	"github.com/kasbuunk/microservice/app/adapter/gql/graphql"
+	"github.com/kasbuunk/microservice/app/adapter/gql/graphql/generated"
 	"github.com/kasbuunk/microservice/app/auth"
-	"github.com/kasbuunk/microservice/server/gql/graphql"
-	"github.com/kasbuunk/microservice/server/gql/graphql/generated"
 )
 
 type Server struct{}
@@ -32,7 +32,7 @@ func New(endpoint string, auth auth.App) (Server, error) {
 				}}))
 
 	http.Handle("/", playground.Handler("GraphQL playground", endpoint))
-	http.Handle(string(endpoint), srv)
+	http.Handle(endpoint, srv)
 
 	return Server{}, nil
 }
