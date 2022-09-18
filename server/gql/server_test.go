@@ -8,8 +8,6 @@ import (
 	"net/http"
 	"strings"
 	"testing"
-
-	"github.com/kasbuunk/microservice/server"
 )
 
 var (
@@ -18,8 +16,8 @@ var (
 )
 
 var conf = Config{
-	Port:     server.Port(SvcPort),
-	Endpoint: Endpoint(SvcGQLEndpoint),
+	Port:     SvcPort,
+	Endpoint: SvcGQLEndpoint,
 }
 var serverURL = fmt.Sprintf("http://localhost:%v%v", conf.Port, conf.Endpoint)
 

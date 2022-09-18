@@ -4,5 +4,5 @@ package server
 type Port int
 
 type Server interface {
-	Serve(Port) error
+	Serve(int) error
 }

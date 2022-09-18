@@ -19,14 +19,12 @@ import (
 type Server struct{}
 
 type Config struct {
-	Port     server.Port
-	Endpoint Endpoint
+	Port     int
+	Endpoint string
 }
 
-type Endpoint string
-
 // New takes an endpoint  returns a new server
-func New(endpoint Endpoint, auth auth.App) (server.Server, error) {
+func New(endpoint string, auth auth.App) (server.Server, error) {
 	srv := handler.NewDefaultServer(
 		generated.NewExecutableSchema(
 			generated.Config{
@@ -34,13 +32,13 @@ func New(endpoint Endpoint, auth auth.App) (server.Server, error) {
 					Auth: auth,
 				}}))
 
-	http.Handle("/", playground.Handler("GraphQL playground", string(endpoint)))
+	http.Handle("/", playground.Handler("GraphQL playground", endpoint))
 	http.Handle(string(endpoint), srv)
 
 	return Server{}, nil
 }
 
-func (s Server) Serve(port server.Port) error {
+func (s Server) Serve(port int) error {
 	log.Printf("connect to http://localhost:%d/ for GraphQL playground", port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), nil))
 	return nil
