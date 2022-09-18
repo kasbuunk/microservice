@@ -9,18 +9,18 @@
 package eventbus
 
 import (
-	"github.com/kasbuunk/microservice/app/eventbus"
+	"github.com/kasbuunk/microservice/app/port"
 )
 
 // EventBus implements the EventBusClient interface through which the caller can Subscribe to and Publish events.
 type EventBus struct {
 	// Holds Subscriptions in memory for now, might be delegated elsewhere
 	// to remain stateless in case of horizontal scaling. Streams do not change at runtime.
-	Streams       []eventbus.Stream
-	Subscriptions []eventbus.Subscription
+	Streams       []port.Stream
+	Subscriptions []port.Subscription
 }
 
-func (b *EventBus) Publish(msg eventbus.Event) error {
+func (b *EventBus) Publish(msg port.Event) error {
 	// For all subscribers that match the msg,
 	for _, subscription := range b.Subscriptions { // b.Subscriptions() when delegated state.
 		if subscribed(subscription, msg) {
@@ -32,10 +32,10 @@ func (b *EventBus) Publish(msg eventbus.Event) error {
 	return nil
 }
 
-func (b *EventBus) Subscribe(stream eventbus.Stream, subject eventbus.Subject) (chan eventbus.Event, error) {
-	eventBus := make(chan eventbus.Event)
+func (b *EventBus) Subscribe(stream port.Stream, subject port.Subject) (chan port.Event, error) {
+	eventBus := make(chan port.Event)
 
-	subscription := eventbus.Subscription{
+	subscription := port.Subscription{
 		EventBus: eventBus,
 		Stream:   stream,
 		Subject:  subject,
@@ -51,17 +51,17 @@ func (b *EventBus) Subscribe(stream eventbus.Stream, subject eventbus.Subject) (
 // should be added after initialisation, upon passing it to the services. The services
 // themselves are responsible for calling the method that adds their subscription.
 func New(streamNames []string) *EventBus {
-	var streams []eventbus.Stream
+	var streams []port.Stream
 	for _, stream := range streamNames {
-		streams = append(streams, eventbus.Stream(stream))
+		streams = append(streams, port.Stream(stream))
 	}
 	return &EventBus{
 		Streams:       streams,
-		Subscriptions: []eventbus.Subscription{},
+		Subscriptions: []port.Subscription{},
 	}
 }
 
-func subscribed(sub eventbus.Subscription, msg eventbus.Event) bool {
+func subscribed(sub port.Subscription, msg port.Event) bool {
 	// TODO: allow regex matching.
 	if sub.Subject == msg.Subject || sub.Stream == msg.Stream {
 		return true

@@ -3,11 +3,11 @@ package main
 import (
 	"log"
 
-	"github.com/kasbuunk/microservice/adapter/eventbus"
-	"github.com/kasbuunk/microservice/app/auth/adapter/repository/storage"
-	"github.com/kasbuunk/microservice/app/auth/adapter/repository/user"
+	"github.com/kasbuunk/microservice/app/adapter/email"
+	"github.com/kasbuunk/microservice/app/adapter/eventbus"
+	"github.com/kasbuunk/microservice/app/adapter/repository/storage"
+	"github.com/kasbuunk/microservice/app/adapter/repository/user"
 	authapp "github.com/kasbuunk/microservice/app/auth/core"
-	"github.com/kasbuunk/microservice/app/email/adapter/email"
 	emailapp "github.com/kasbuunk/microservice/app/email/core"
 	"github.com/kasbuunk/microservice/config"
 	"github.com/kasbuunk/microservice/event/auth"
