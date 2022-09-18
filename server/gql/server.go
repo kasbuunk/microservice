@@ -32,7 +32,7 @@ func New(endpoint string, auth auth.App) (Server, error) {
 				}}))
 
 	http.Handle("/", playground.Handler("GraphQL playground", endpoint))
-	http.Handle(string(endpoint), srv)
+	http.Handle(endpoint, srv)
 
 	return Server{}, nil
 }
