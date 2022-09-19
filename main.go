@@ -34,7 +34,7 @@ func main() {
 	})
 
 	// Initialise Apps that implement all core domain logic, injecting dependencies.
-	authApp := authapp.New(userRepo, eventBus)
+	authApp := authapp.New(eventBus, userRepo)
 	emailApp := emailapp.New(eventBus, emailClient)
 
 	// Initialise sources of input: event handlers.

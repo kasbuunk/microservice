@@ -9,6 +9,14 @@ type EventBus interface {
 	Publish(Event) error
 }
 
+type EventSubscriber interface {
+	Subscribe(Stream, Subject) (chan Event, error)
+}
+
+type EventPublisher interface {
+	Publish(Event) error
+}
+
 type Subject string
 type Stream string
 type Body string

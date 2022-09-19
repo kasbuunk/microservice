@@ -9,8 +9,8 @@ import (
 
 // App implements the API interface.
 type App struct {
-	EventBus    port.EventBus
-	EmailClient port.EmailClient
+	EventPublisher port.EventPublisher
+	EmailClient    port.EmailClient
 }
 
 func (s App) Send() error {
@@ -19,15 +19,15 @@ func (s App) Send() error {
 		Subject: "ACTIVATION_REQUEST_SENT",
 		Body:    port.Body("new user registered with email"),
 	}
-	err := s.EventBus.Publish(msg)
+	err := s.EventPublisher.Publish(msg)
 	if err != nil {
 		return fmt.Errorf("publishing msg: %w", err)
 	}
 	return nil
 }
 
-func New(busClient port.EventBus, emailClient port.EmailClient) email.App {
+func New(eventPublisher port.EventPublisher, emailClient port.EmailClient) email.App {
 	return App{
-		EventBus:    busClient,
-		EmailClient: emailClient}
+		EventPublisher: eventPublisher,
+		EmailClient:    emailClient}
 }

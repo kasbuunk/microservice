@@ -15,14 +15,14 @@ import (
 // added here so the domain core remains pure and agnostic of any calls over the network, including other
 // microservices that are part of the same application.
 type App struct {
-	Repository port.Repository
-	EventBus   port.EventBus
+	EventPublisher port.EventPublisher
+	Repository     port.Repository
 }
 
-func New(userRepo port.Repository, bus port.EventBus) App {
+func New(eventPublisher port.EventPublisher, userRepo port.Repository) App {
 	return App{
-		Repository: userRepo,
-		EventBus:   bus,
+		EventPublisher: eventPublisher,
+		Repository:     userRepo,
 	}
 }
 
@@ -43,7 +43,7 @@ func (a App) Register(email models.EmailAddress, password models.Password) (mode
 		Subject: "USER_REGISTERED",
 		Body:    port.Body(fmt.Sprintf("new user registered with email %s", usr.Email)),
 	}
-	err = a.EventBus.Publish(msg)
+	err = a.EventPublisher.Publish(msg)
 	if err != nil {
 		return savedUser, fmt.Errorf("publishing msg: %w", err)
 	}
