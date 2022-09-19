@@ -22,10 +22,7 @@ var conf = Config{
 var serverURL = fmt.Sprintf("http://localhost:%v%v", conf.Port, conf.Endpoint)
 
 func setupServer(t *testing.T) {
-	svc, err := New(conf.Endpoint, nil)
-	if err != nil {
-		t.Error(err)
-	}
+	svc := New(nil, conf.Endpoint)
 
 	// Start server in separate process.
 	go func() {
