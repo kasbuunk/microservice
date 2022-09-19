@@ -9,8 +9,8 @@ import (
 )
 
 type AuthEventHandler struct {
-	API       auth.App
-	BusClient port.EventBus
+	App             auth.App
+	EventSubscriber port.EventSubscriber
 }
 
 // Handle listens for events that match the Stream or Subject and invokes the appropriate domain behaviour.
@@ -18,7 +18,7 @@ func (s AuthEventHandler) Handle() {
 	fmt.Println("Auth service listening for events.")
 	for {
 		// Starts process in loop, awaiting published messages.
-		eventBus, err := s.BusClient.Subscribe("AUTH", "ACTIVATION_REQUEST_SENT")
+		eventBus, err := s.EventSubscriber.Subscribe("AUTH", "ACTIVATION_REQUEST_SENT")
 		if err != nil {
 			log.Fatal(fmt.Errorf("subscribing: %w", err))
 		}
@@ -28,9 +28,9 @@ func (s AuthEventHandler) Handle() {
 	}
 }
 
-func NewAuthEventHandler(api auth.App, bus port.EventBus) AuthEventHandler {
+func NewAuthEventHandler(app auth.App, eventSubscriber port.EventSubscriber) AuthEventHandler {
 	return AuthEventHandler{
-		API:       api,
-		BusClient: bus,
+		App:             app,
+		EventSubscriber: eventSubscriber,
 	}
 }

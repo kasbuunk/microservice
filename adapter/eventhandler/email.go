@@ -9,8 +9,8 @@ import (
 )
 
 type EmailEventHandler struct {
-	App       email.App
-	BusClient port.EventBus
+	App             email.App
+	EventSubscriber port.EventSubscriber
 }
 
 // Handle listens for events that match the Stream or Subject and invokes the appropriate domain behaviour.
@@ -18,7 +18,7 @@ func (s EmailEventHandler) Handle() {
 	fmt.Println("Email service listening for events.")
 	for {
 		// Starts process in loop, awaiting published messages.
-		eventBus, err := s.BusClient.Subscribe("AUTH", "USER_REGISTERED")
+		eventBus, err := s.EventSubscriber.Subscribe("AUTH", "USER_REGISTERED")
 		if err != nil {
 			log.Fatal(fmt.Errorf("subscribing: %w", err))
 		}
@@ -28,9 +28,9 @@ func (s EmailEventHandler) Handle() {
 	}
 }
 
-func NewEmailEventHandler(api email.App, bus port.EventBus) EmailEventHandler {
+func NewEmailEventHandler(app email.App, eventSubscriber port.EventSubscriber) EmailEventHandler {
 	return EmailEventHandler{
-		App:       api,
-		BusClient: bus,
+		App:             app,
+		EventSubscriber: eventSubscriber,
 	}
 }
