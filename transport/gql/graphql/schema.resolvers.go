@@ -7,9 +7,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/kasbuunk/microservice/adapter/gql/graphql/generated"
-	"github.com/kasbuunk/microservice/adapter/gql/graphql/model"
 	"github.com/kasbuunk/microservice/auth/models"
+	"github.com/kasbuunk/microservice/transport/gql/graphql/generated"
+	"github.com/kasbuunk/microservice/transport/gql/graphql/model"
 )
 
 // RegisterUser is the resolver for the registerUser field.

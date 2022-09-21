@@ -1,4 +1,4 @@
-package port
+package transport
 
 type EventHandler interface {
 	// Handle listens for events that match the Stream or Subject and invokes the appropriate domain behaviour.
