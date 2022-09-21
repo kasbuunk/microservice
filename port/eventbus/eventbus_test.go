@@ -35,15 +35,11 @@ func (s *EventBusTestSuite) TestPubSub() {
 		Subject: "invoice paid",
 	}
 	go func() {
-		for {
-			select {
-			case incomingEvent := <-incomingEvents:
-				s.Equal(orderEvent, incomingEvent)
-				s.NotEqual(invoiceEvent.Stream, incomingEvent)
-				return
-			}
-		}
+		incomingEvent := <-incomingEvents
+		s.Equal(orderEvent, incomingEvent)
+		s.NotEqual(invoiceEvent.Stream, incomingEvent)
 	}()
+
 	err = s.EventBus.Publish(orderEvent)
 	assert.NoError(s.T(), err)
 	time.Sleep(20 * time.Millisecond)

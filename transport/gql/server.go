@@ -9,9 +9,9 @@ import (
 
 	"github.com/99designs/gqlgen/graphql/handler"
 
-	"github.com/kasbuunk/microservice/adapter/gql/graphql"
-	"github.com/kasbuunk/microservice/adapter/gql/graphql/generated"
 	"github.com/kasbuunk/microservice/auth"
+	"github.com/kasbuunk/microservice/transport/gql/graphql"
+	"github.com/kasbuunk/microservice/transport/gql/graphql/generated"
 )
 
 type Config struct {

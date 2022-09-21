@@ -6,9 +6,9 @@ package config
 import (
 	"github.com/kelseyhightower/envconfig"
 
-	"github.com/kasbuunk/microservice/adapter/email"
-	"github.com/kasbuunk/microservice/adapter/gql"
 	"github.com/kasbuunk/microservice/internal/storage"
+	"github.com/kasbuunk/microservice/port/email"
+	"github.com/kasbuunk/microservice/transport/gql"
 )
 
 const envPrefix = "svc"
