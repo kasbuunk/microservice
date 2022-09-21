@@ -39,6 +39,7 @@ func (s *EventBusTestSuite) TestPubSub() {
 		s.Equal(orderEvent, incomingEvent)
 		s.NotEqual(invoiceEvent.Stream, incomingEvent)
 	}()
+
 	err = s.EventBus.Publish(orderEvent)
 	assert.NoError(s.T(), err)
 	time.Sleep(20 * time.Millisecond)
