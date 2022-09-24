@@ -1,4 +1,4 @@
-package eventbus
+package localbus
 
 import (
 	"testing"
@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/kasbuunk/microservice/port"
+	"github.com/kasbuunk/microservice/eventbus"
 )
 
 type EventBusTestSuite struct {
@@ -21,16 +21,16 @@ func (s *EventBusTestSuite) SetupTest() {
 
 func (s *EventBusTestSuite) TestPubSub() {
 	// Init some participants in the event bus. Some subscribers and publishers.
-	orderStream := port.Stream("ORDER")
-	invoiceStream := port.Stream("INVOICE")
+	orderStream := eventbus.Stream("ORDER")
+	invoiceStream := eventbus.Stream("INVOICE")
 	incomingEvents, err := s.EventBus.Subscribe(orderStream, "*")
 	assert.NoError(s.T(), err)
 
-	orderEvent := port.Event{
+	orderEvent := eventbus.Event{
 		Stream:  orderStream,
 		Subject: "order placed",
 	}
-	invoiceEvent := port.Event{
+	invoiceEvent := eventbus.Event{
 		Stream:  invoiceStream,
 		Subject: "invoice paid",
 	}

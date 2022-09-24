@@ -15,7 +15,7 @@ type Config struct {
 	AccountToken string
 }
 
-// New returns a configured email eventbus.
+// New returns a configured email client.
 // TODO: Add static configuration in config and pass through here as input.
 func New(conf Config) EmailClient {
 	postmarkClient := postmark.NewClient(conf.ServerToken, conf.AccountToken)

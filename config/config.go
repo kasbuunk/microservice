@@ -6,8 +6,8 @@ package config
 import (
 	"github.com/kelseyhightower/envconfig"
 
+	"github.com/kasbuunk/microservice/email/port/email"
 	"github.com/kasbuunk/microservice/internal/storage"
-	"github.com/kasbuunk/microservice/port/email"
 	"github.com/kasbuunk/microservice/transport/gql"
 )
 
@@ -20,7 +20,7 @@ type Config struct {
 	Postmark  emailclient.Config
 }
 
-// New takes its 'input' from environment variables and returns everything  the microservice
+// New takes its 'input' from environment variables and returns everything the microservice
 // needs to serve requests, including a port, endpoint and database configuration.
 func New() (Config, error) {
 	var conf Config
