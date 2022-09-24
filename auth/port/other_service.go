@@ -1,8 +1,8 @@
 package port
 
-// Serves as placeholder for where to put a port interface to interact with another service over the network.
+// Serves as placeholder for where to put a localbus interface to interact with another service over the network.
 
-// A port for another service only requires and returns domain-specific data.
+// A localbus for another service only requires and returns domain-specific data.
 
 // This interface would not know how the call would be made. Perhaps the request does not even go over the network,
 // like the simplified 'email' service is interacted with. At this level, that is unknown.

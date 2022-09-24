@@ -5,12 +5,12 @@ import (
 	"log"
 
 	"github.com/kasbuunk/microservice/email"
-	"github.com/kasbuunk/microservice/port"
+	"github.com/kasbuunk/microservice/eventbus"
 )
 
 type EmailEventHandler struct {
 	App             email.App
-	EventSubscriber port.EventSubscriber
+	EventSubscriber eventbus.EventSubscriber
 }
 
 // Handle listens for events that match the Stream or Subject and invokes the appropriate domain behaviour.
@@ -28,7 +28,7 @@ func (s EmailEventHandler) Handle() {
 	}
 }
 
-func NewEmailEventHandler(app email.App, eventSubscriber port.EventSubscriber) EmailEventHandler {
+func NewEmailEventHandler(app email.App, eventSubscriber eventbus.EventSubscriber) EmailEventHandler {
 	return EmailEventHandler{
 		App:             app,
 		EventSubscriber: eventSubscriber,

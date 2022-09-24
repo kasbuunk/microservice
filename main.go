@@ -4,12 +4,12 @@ import (
 	"log"
 
 	authapp "github.com/kasbuunk/microservice/auth/core"
+	"github.com/kasbuunk/microservice/auth/port/repository/user"
 	"github.com/kasbuunk/microservice/config"
 	emailapp "github.com/kasbuunk/microservice/email/core"
+	"github.com/kasbuunk/microservice/email/port/email"
+	"github.com/kasbuunk/microservice/eventbus/localbus"
 	"github.com/kasbuunk/microservice/internal/storage"
-	"github.com/kasbuunk/microservice/port/email"
-	"github.com/kasbuunk/microservice/port/eventbus"
-	"github.com/kasbuunk/microservice/port/repository/user"
 	"github.com/kasbuunk/microservice/transport/eventhandler"
 	"github.com/kasbuunk/microservice/transport/gql"
 )
@@ -28,7 +28,7 @@ func main() {
 	// Initialise adapters.
 	userRepo := userrepo.New(db)
 	emailClient := emailclient.New(conf.Postmark)
-	eventBus := eventbus.New([]string{
+	eventBus := localbus.New([]string{
 		"AUTH",
 		"EMAIL",
 	})

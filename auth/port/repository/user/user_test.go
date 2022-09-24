@@ -4,9 +4,9 @@ import (
 	"testing"
 
 	"github.com/kasbuunk/microservice/auth/models"
+	"github.com/kasbuunk/microservice/auth/port"
 	"github.com/kasbuunk/microservice/auth/user"
 	"github.com/kasbuunk/microservice/internal/storage"
-	"github.com/kasbuunk/microservice/port"
 )
 
 var (

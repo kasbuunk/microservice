@@ -5,12 +5,12 @@ import (
 	"log"
 
 	"github.com/kasbuunk/microservice/auth"
-	"github.com/kasbuunk/microservice/port"
+	"github.com/kasbuunk/microservice/eventbus"
 )
 
 type AuthEventHandler struct {
 	App             auth.App
-	EventSubscriber port.EventSubscriber
+	EventSubscriber eventbus.EventSubscriber
 }
 
 // Handle listens for events that match the Stream or Subject and invokes the appropriate domain behaviour.
@@ -28,7 +28,7 @@ func (s AuthEventHandler) Handle() {
 	}
 }
 
-func NewAuthEventHandler(app auth.App, eventSubscriber port.EventSubscriber) AuthEventHandler {
+func NewAuthEventHandler(app auth.App, eventSubscriber eventbus.EventSubscriber) AuthEventHandler {
 	return AuthEventHandler{
 		App:             app,
 		EventSubscriber: eventSubscriber,
